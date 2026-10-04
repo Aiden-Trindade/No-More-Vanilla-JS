@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Ledger</title>
+  <link rel="stylesheet" href="../../shared/css/global.css" />
+  <link rel="stylesheet" href="./css/home.css" />
+</head>
+<body>
+
+  <div class="shell">
+    <div class="menu-overlay" id="overlay" onclick="toggleCapsule(false)"></div>
+
+    <header class="top-header">
+      <div>
+        <div class="user-greeting">Hello Aiden</div>
+        <div class="date-subtext" id="live-date">--</div>
+      </div>
+
+      <div class="capsule-nav-container" id="capsule-container">
+        <div class="nav-capsule" onclick="toggleCapsule()">
+          <span class="capsule-dot"></span>
+          <span class="capsule-title">Home</span>
+          <svg class="capsule-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </div>
+
+        <nav class="capsule-menu">
+          <a href="#" class="menu-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+            Dashboard
+          </a>
+          <a href="#" class="menu-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line></svg>
+            History
+          </a>
+          <a href="#" class="menu-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            Breakdown
+          </a>
+          <a href="#" class="menu-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            Preferences
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="home-viewport">
+      // MODULES LOADING
+    </main>
+  </div>
+
+  <script src="../../shared/js/navbar.js"></script>
+  <script src="./js/home.js"></script>
+</body>
+</html>
