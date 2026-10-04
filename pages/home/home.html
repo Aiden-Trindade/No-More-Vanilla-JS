@@ -20,7 +20,6 @@
       </div>
 
       <!-- Capsule Nav -->
-
       <div class="Capsule_Nav" id="capsule-wrap">
         <div class="Capsule_Btn" onclick="toggle_nav()">
           <span class="Capsule_Dot"></span>
@@ -51,29 +50,140 @@
       </div>
     </header>
 
-<main class="Home_Viewport">
+    <main class="Home_Viewport">
 
-      <section class="Spend_Card">
-        <div class="Card">
-          <span class="Card_Label">October Outflow</span>
-          <div class="Status_Badge">
-            <span class="Status"></span>
-            <span>ON TRACK</span>
+      <!-- 1. SPENT THIS MONTH CARD -->
+      <section class="Metric_Card">
+        <div class="Card_Top_Line">
+          <span class="Card_Label">SPENT THIS MONTH</span>
+          <span class="Period_Tag">OCT 2026</span>
+        </div>
+
+        <div class="Amount_Display">
+          <span class="Currency_Symbol">₹</span>
+          <span class="Amount_Value">19,150.00</span>
+        </div>
+
+        <div class="Status_Pill_Row">
+          <span class="Status_Pill">ON TRACK</span>
+          <span class="Status_Note">Within your planned limit</span>
+        </div>
+      </section>
+
+      <!-- 2. THIS WEEK BAR GRAPH CARD -->
+      <section class="Metric_Card">
+        <div class="Card_Topline">
+          <span class="Card_Label">THIS WEEK</span>
+          <span class="Meta_Stat">₹4,810 TOTAL</span>
+        </div>
+
+        <div class="Bar_Chart_Frame">
+          <div class="Bar_Chart_Baseline"></div>
+
+          <div class="Bar_Column">
+            <div class="Bar_Track">
+              <div class="Bar_Fill" style="height: 38%;"></div>
+            </div>
+            <span class="Day_Label">M</span>
+          </div>
+
+          <div class="Bar_Column">
+            <div class="Bar_Track">
+              <div class="Bar_Fill" style="height: 18%;"></div>
+            </div>
+            <span class="Day_Label">T</span>
+          </div>
+
+          <div class="Bar_Column">
+            <div class="Bar_Track">
+              <div class="Bar_Fill" style="height: 52%;"></div>
+            </div>
+            <span class="Day_Label">W</span>
+          </div>
+
+          <div class="Bar_Column">
+            <div class="Bar_Track">
+              <div class="Bar_Fill" style="height: 24%;"></div>
+            </div>
+            <span class="Day_Label">T</span>
+          </div>
+
+          <div class="Bar_Column">
+            <div class="Bar_Track">
+              <div class="Bar_Fill" style="height: 85%;"></div>
+            </div>
+            <span class="Day_Label">F</span>
+          </div>
+
+          <div class="Bar_Column">
+            <div class="Bar_Track">
+              <div class="Bar_Fill Bar_Highlight" style="height: 70%;"></div>
+            </div>
+            <span class="Day_Label Active_Day">S</span>
+          </div>
+
+          <div class="Bar_Column">
+            <div class="Bar_Track">
+              <div class="Bar_Fill" style="height: 44%;"></div>
+            </div>
+            <span class="Day_Label">S</span>
           </div>
         </div>
+      </section>
 
-        <div class="Spend_Amount">
-          <span class="Currency_Sign">₹</span>
-          <span class="Total_Value" id="total-val">19,150.00</span>
+      <!-- 3. WHERE IT WENT DONUT CARD -->
+      <section class="Metric_Card">
+        <div class="Card_Topline">
+          <span class="Card_Label">WHERE IT WENT</span>
+          <span class="Meta_Stat">TOP 4</span>
         </div>
 
-        <div class="Card_Footer_Info">
-          <span>Cap: ₹40,000.00</span>
-          <span>47.8% used</span>
-        </div>
+        <div class="Donut_Section_Layout">
+          <div class="Donut_Graphic_Wrap">
+            <svg class="Donut_Svg_El" viewBox="0 0 100 100">
+              <circle class="Donut_Path Seg_Dining_Color" cx="50" cy="50" r="38" stroke-dasharray="105 239" stroke-dashoffset="0" />
+              <circle class="Donut_Path Seg_Housing_Color" cx="50" cy="50" r="38" stroke-dasharray="67 239" stroke-dashoffset="-105" />
+              <circle class="Donut_Path Seg_Transit_Color" cx="50" cy="50" r="38" stroke-dasharray="43 239" stroke-dashoffset="-172" />
+              <circle class="Donut_Path Seg_Supplies_Color" cx="50" cy="50" r="38" stroke-dasharray="24 239" stroke-dashoffset="-215" />
+            </svg>
+            <div class="Donut_Inner_Badge">
+              <span class="Badge_Top_Text">TOP 4</span>
+            </div>
+          </div>
 
-        <div class="Limit_Track">
-          <div class="Limit_Fill" id="main-meter" style="width: 47.8%;"></div>
+          <div class="Category_Legend_List">
+            <div class="Legend_Row">
+              <div class="Legend_Left">
+                <span class="Legend_Dot Seg_Dining_Bg"></span>
+                <span class="Legend_Title">Dining</span>
+              </div>
+              <span class="Legend_Price">₹8,426</span>
+            </div>
+
+            <div class="Legend_Row">
+              <div class="Legend_Left">
+                <span class="Legend_Dot Seg_Housing_Bg"></span>
+                <span class="Legend_Title">Housing</span>
+              </div>
+              <span class="Legend_Price">₹5,362</span>
+            </div>
+
+            <div class="Legend_Row">
+              <div class="Legend_Left">
+                <span class="Legend_Dot Seg_Transit_Bg"></span>
+                <span class="Legend_Title">Transit</span>
+              </div>
+              <span class="Legend_Price">₹3,447</span>
+            </div>
+
+            <div class="Legend_Row">
+              <div class="Legend_Left">
+                <span class="Legend_Dot Seg_Supplies_Bg"></span>
+                <span class="Legend_Title">Supplies</span>
+              </div>
+              <span class="Legend_Price">₹1,915</span>
+            </div>
+          </div>
         </div>
       </section>
 

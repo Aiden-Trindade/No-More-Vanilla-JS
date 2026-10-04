@@ -1,104 +1,243 @@
+/* viewport layout */
 .Home_Viewport {
   flex: 1;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--textdim);
-  font-family: monospace;
-  font-size: 12px;
+  flex-direction: column;
+  padding: 20px 18px 24px 18px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  gap: 20px;
+  width: 100%;
 }
 
-.Spend_Card {
+/* common card styling */
+.Metric_Card {
+  width: 100%;
+  box-sizing: border-box;
   background-color: var(--boxbg);
   border: 1px solid var(--bordercol);
-  border-radius: 18px;
-  padding: 20px 18px 18px 18px;
+  border-radius: 14px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  position: relative;
 }
 
-.Card{
+.Card_Topline {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .Card_Label {
   font-size: 11px;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
   color: var(--textdim);
   font-family: monospace;
   font-weight: 700;
+  letter-spacing: 0.05em;
 }
 
-.Status_Badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-  background-color: rgba(55, 178, 77, 0.12);
-  border: 1px solid rgba(55, 178, 77, 0.35);
-  color: var(--accentdot);
-  padding: 3px 8px;
-  border-radius: 99px;
+.Period_Tag, .Meta_Stat {
   font-size: 10px;
-  font-weight: 700;
+  color: var(--textdim);
   font-family: monospace;
-  letter-spacing: 0.04em;
 }
 
-.Status {
-  width: 5px;
-  height: 5px;
-  background-color: var(--accentdot);
-  border-radius: 50%;
-}
-
-.Spend_Amount {
+/* spent this month styles */
+.Amount_Display {
   display: flex;
   align-items: baseline;
   gap: 4px;
-  margin-top: 4px;
-  margin-bottom: 14px;
+  margin-top: 2px;
+  margin-bottom: 8px;
 }
 
-.Currency_Sign {
-  font-size: 24px;
+.Currency_Symbol {
+  font-size: 26px;
   font-weight: 600;
-  color: var(--textdim);
+  color: var(--textmain);
 }
 
-.Total_Value {
+.Amount_Value {
   font-size: 38px;
   font-weight: 800;
-  letter-spacing: -0.03em;
+  letter-spacing: -0.02em;
   color: var(--textmain);
   line-height: 1;
 }
 
-.Card_Footer_Info {
+.Status_Pill_Row {
   display: flex;
-  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.Status_Pill {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 99px;
+  border: 1px solid rgba(55, 178, 77, 0.4);
+  background: rgba(55, 178, 77, 0.1);
+  color: var(--accentdot);
+  font-size: 9px;
+  font-weight: 700;
+  font-family: monospace;
+  letter-spacing: 0.03em;
+}
+
+.Status_Note {
   font-size: 11px;
   color: var(--textdim);
-  margin-bottom: 7px;
+}
+
+/* weekly bar chart styles */
+.Bar_Chart_Frame {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 110px;
+  padding-top: 10px;
+  margin-top: 4px;
+}
+
+.Bar_Chart_Baseline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 22px;
+  height: 1px;
+  background-color: var(--bordercol);
+  z-index: 1;
+}
+
+.Bar_Column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  height: 100%;
+  justify-content: flex-end;
+  z-index: 2;
+  flex: 1;
+}
+
+.Bar_Track {
+  width: 14px;
+  height: 75px;
+  display: flex;
+  align-items: flex-end;
+  background: transparent;
+}
+
+.Bar_Fill {
+  width: 100%;
+  background-color: #2b6cb0; /* industrial muted blue from video */
+  border-radius: 2px 2px 0 0;
+}
+
+.Bar_Highlight {
+  background-color: #3182ce;
+}
+
+.Day_Label {
+  font-size: 10px;
+  color: var(--textdim);
   font-family: monospace;
 }
 
-.Limit_Track {
-  width: 100%;
-  height: 6px;
-  background-color: var(--hoverbg);
-  border-radius: 99px;
-  overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.04);
+.Active_Day {
+  color: var(--textmain);
+  font-weight: 700;
 }
 
-.Limit_Fill {
+/* where it went donut section */
+.Donut_Section_Layout {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 6px;
+}
+
+.Donut_Graphic_Wrap {
+  position: relative;
+  width: 108px;
+  height: 108px;
+  flex-shrink: 0;
+}
+
+.Donut_Svg_El {
+  width: 100%;
   height: 100%;
-  width: 48%; /* hardcoded stand-in until db connection */
-  background-color: var(--accentglow);
-  border-radius: 99px;
+  transform: rotate(-90deg);
+}
+
+.Donut_Path {
+  fill: none;
+  stroke-width: 16;
+}
+
+/* precise video color palette */
+.Seg_Dining_Color { stroke: #e5484d; }
+.Seg_Housing_Color { stroke: #46a758; }
+.Seg_Transit_Color { stroke: #3e63dd; }
+.Seg_Supplies_Color { stroke: #e54d2e; }
+
+.Seg_Dining_Bg { background-color: #e5484d; }
+.Seg_Housing_Bg { background-color: #46a758; }
+.Seg_Transit_Bg { background-color: #3e63dd; }
+.Seg_Supplies_Bg { background-color: #e54d2e; }
+
+.Donut_Inner_Badge {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.Badge_Top_Text {
+  font-size: 11px;
+  font-weight: 800;
+  font-family: monospace;
+  color: var(--textmain);
+}
+
+/* category legend list */
+.Category_Legend_List {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  flex: 1;
+}
+
+.Legend_Row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.Legend_Left {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.Legend_Dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.Legend_Title {
+  font-size: 12px;
+  color: var(--textmain);
+}
+
+.Legend_Price {
+  font-size: 11px;
+  color: var(--textdim);
+  font-family: monospace;
 }
