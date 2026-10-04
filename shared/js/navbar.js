@@ -1,19 +1,40 @@
-function toggleCapsule(forceState) {
-  const container = document.getElementById('capsule-container');
-  const overlay = document.getElementById('overlay');
-  const isOpen = forceState !== undefined ? forceState : !container.classList.contains('open');
+// quick handler for mobile capsule clicks
 
-  container.classList.toggle('open', isOpen);
-  overlay.classList.toggle('active', isOpen);
-}
+function toggle_nav(force_close) {
+  var capsule_wrap = document.getElementById("capsule-wrap");
+  var screen_mask = document.getElementById("screen-mask");
 
-function updateDate() {
-  const dateElem = document.getElementById('live-date');
-  if (dateElem) {
-    const now = new Date();
-    const options = { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' };
-    dateElem.innerText = now.toLocaleDateString('en-US', options);
+  if (!capsule_wrap){
+     return;
+  }
+
+  var is_open = capsule_wrap.classList.contains("Menu_Open");
+
+  if (force_close === true || is_open) {
+    capsule_wrap.classList.remove("Menu_Open");
+    if (screen_mask) screen_mask.classList.remove("Is_Shown");
+  } else {
+    capsule_wrap.classList.add("Menu_Open");
+    if (screen_mask) screen_mask.classList.add("Is_Shown");
   }
 }
 
-document.addEventListener('DOMContentLoaded', updateDate);
+// pull current date
+
+function run_date_stamp() {
+  var target = document.getElementById("date-box");
+  if (!target) {
+    return;
+  }
+  
+  var d = new Date();
+  var days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  
+  var text = days[d.getDay()] + ", " + months[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear();
+  target.innerText = text;
+}
+
+window.onload = function() {
+  run_date_stamp();
+};
