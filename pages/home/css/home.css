@@ -7,3 +7,98 @@
   font-family: monospace;
   font-size: 12px;
 }
+
+.Spend_Card {
+  background-color: var(--boxbg);
+  border: 1px solid var(--bordercol);
+  border-radius: 18px;
+  padding: 20px 18px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.Card{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.Card_Label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--textdim);
+  font-family: monospace;
+  font-weight: 700;
+}
+
+.Status_Badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background-color: rgba(55, 178, 77, 0.12);
+  border: 1px solid rgba(55, 178, 77, 0.35);
+  color: var(--accentdot);
+  padding: 3px 8px;
+  border-radius: 99px;
+  font-size: 10px;
+  font-weight: 700;
+  font-family: monospace;
+  letter-spacing: 0.04em;
+}
+
+.Status {
+  width: 5px;
+  height: 5px;
+  background-color: var(--accentdot);
+  border-radius: 50%;
+}
+
+.Spend_Amount {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-top: 4px;
+  margin-bottom: 14px;
+}
+
+.Currency_Sign {
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--textdim);
+}
+
+.Total_Value {
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--textmain);
+  line-height: 1;
+}
+
+.Card_Footer_Info {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--textdim);
+  margin-bottom: 7px;
+  font-family: monospace;
+}
+
+.Limit_Track {
+  width: 100%;
+  height: 6px;
+  background-color: var(--hoverbg);
+  border-radius: 99px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.Limit_Fill {
+  height: 100%;
+  width: 48%; /* hardcoded stand-in until db connection */
+  background-color: var(--accentglow);
+  border-radius: 99px;
+}
