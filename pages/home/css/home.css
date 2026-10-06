@@ -22,7 +22,7 @@
   flex-direction: column;
 }
 
-.Card_Topline {
+.Card_Top_Line_Line{
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -35,12 +35,21 @@
   font-family: monospace;
   font-weight: 700;
   letter-spacing: 0.05em;
+  padding-left: 7px;
 }
 
-.Period_Tag, .Meta_Stat {
+.Meta_Stat {
   font-size: 10px;
   color: var(--textdim);
   font-family: monospace;
+  padding-left: 185px;
+}
+
+.Period_Tag{
+  font-size: 10px;
+  color: var(--textdim);
+  font-family: monospace;
+  padding-left: 153px;
 }
 
 /* spent this month styles */
@@ -48,7 +57,7 @@
   display: flex;
   align-items: baseline;
   gap: 4px;
-  margin-top: 2px;
+  margin-top: 18px;
   margin-bottom: 8px;
 }
 
@@ -70,6 +79,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  padding-top: 10px;
 }
 
 .Status_Pill {
@@ -158,6 +168,7 @@
   justify-content: space-between;
   gap: 16px;
   margin-top: 6px;
+  padding-top: 10px;
 }
 
 .Donut_Graphic_Wrap {
@@ -240,4 +251,109 @@
   font-size: 11px;
   color: var(--textdim);
   font-family: monospace;
+  padding-right: 12px;
+}
+
+/* Recent Activity List */
+.Feed_Action_Link {
+  font-size: 10px;
+  color: #4dabf7;
+  font-family: monospace;
+  font-weight: 700;
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  padding-left: 163px;
+}
+
+.Tx_Feed_List {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 6px;
+  padding-top: 15px;
+}
+
+.Tx_Row_Item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.Tx_Row_Item:last-child {
+  border-bottom: none;
+  padding-bottom: 0px;
+}
+
+.Tx_Left_Meta {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.Tx_Dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.Tx_Identity {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.Tx_Name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--textmain);
+}
+
+.Tx_Sub_Info {
+  font-size: 10px;
+  color: var(--textdim);
+  font-family: monospace;
+  padding-top: 5px;
+}
+
+.Tx_Outflow_Val {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--textmain);
+  font-family: monospace;
+}
+
+/* Floating Action Button */
+.Fab_Trigger {
+  position: sticky;
+  bottom: 14px;
+  align-self: center;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: auto;
+  max-width: 160px;
+  background-color: var(--boxbg);
+  border: 1px solid var(--bordercol);
+  color: var(--textmain);
+  padding: 10px 18px;
+  border-radius: 99px;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+  z-index: 10;
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  margin-top: 8px;
+}
+
+.Fab_Trigger .Fab_Icon {
+  width: 14px !important;
+  height: 14px !important;
+  stroke: #4dabf7;
+  flex-shrink: 0;
 }

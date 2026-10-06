@@ -72,7 +72,7 @@
 
       <!-- 2. THIS WEEK BAR GRAPH CARD -->
       <section class="Metric_Card">
-        <div class="Card_Topline">
+        <div class="line">
           <span class="Card_Label">THIS WEEK</span>
           <span class="Meta_Stat">₹4,810 TOTAL</span>
         </div>
@@ -133,9 +133,9 @@
 
       <!-- 3. WHERE IT WENT DONUT CARD -->
       <section class="Metric_Card">
-        <div class="Card_Topline">
-          <span class="Card_Label">WHERE IT WENT</span>
-          <span class="Meta_Stat">TOP 4</span>
+        <div class="Card_Top_Line">
+          <span class="Card_Label" style="padding-left: 15px;">WHERE IT WENT</span>  <!-- had to move this to the center cus the title wasnt under the donut graph and that irritates me. It had a global class, so i had to do it here-->
+           <span class="Meta_Stat" style="position: relative; left: -18px; white-space: nowrap;">TOP 4</span>
         </div>
 
         <div class="Donut_Section_Layout">
@@ -186,6 +186,69 @@
           </div>
         </div>
       </section>
+    
+    <!-- 4. RECENT ACTIVITY CARD -->
+      <section class="Metric_Card">
+        <div class="Card_Topline">
+          <span class="Card_Label">RECENT ACTIVITY</span>
+          <a href="#" class="Feed_Action_Link">VIEW ALL</a>
+        </div>
+
+        <div class="Tx_Feed_List">
+          <div class="Tx_Row_Item">
+            <div class="Tx_Left_Meta">
+              <span class="Tx_Dot Seg_Dining_Bg"></span>
+              <div class="Tx_Identity">
+                <span class="Tx_Name">Swiggy</span>
+                <span class="Tx_Sub_Info">Dining • Oct 5, 9:20 PM</span>
+              </div>
+            </div>
+            <span class="Tx_Outflow_Val">-₹420.00</span>
+          </div>
+
+          <div class="Tx_Row_Item">
+            <div class="Tx_Left_Meta">
+              <span class="Tx_Dot Seg_Transit_Bg"></span>
+              <div class="Tx_Identity">
+                <span class="Tx_Name">Metro</span>
+                <span class="Tx_Sub_Info">Transit • Oct 5, 8:15 AM</span>
+              </div>
+            </div>
+            <span class="Tx_Outflow_Val">-₹60.00</span>
+          </div>
+
+          <div class="Tx_Row_Item">
+            <div class="Tx_Left_Meta">
+              <span class="Tx_Dot Seg_Supplies_Bg"></span>
+              <div class="Tx_Identity">
+                <span class="Tx_Name">Stationery</span>
+                <span class="Tx_Sub_Info">Supplies • Oct 4, 4:40 PM</span>
+              </div>
+            </div>
+            <span class="Tx_Outflow_Val">-₹185.00</span>
+          </div>
+
+          <div class="Tx_Row_Item">
+            <div class="Tx_Left_Meta">
+              <span class="Tx_Dot Seg_Housing_Bg"></span>
+              <div class="Tx_Identity">
+                <span class="Tx_Name">Water Supply Bill</span>
+                <span class="Tx_Sub_Info">Housing • Oct 3, 11:10 AM</span>
+              </div>
+            </div>
+            <span class="Tx_Outflow_Val">-₹850.00</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Sticky Action Button -->
+      <button class="Fab_Trigger" onclick="alert('Log outflow sheet coming next')">
+        <svg class="Fab_Icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="12" y1="5" x2="12" y2="19"></line>
+          <line x1="5" y1="12" x2="19" y2="12"></line>
+        </svg>
+        <span>LOG SPEND</span>
+      </button>
 
     </main>
   </div>
