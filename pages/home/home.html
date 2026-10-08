@@ -189,7 +189,7 @@
     
     <!-- 4. RECENT ACTIVITY CARD -->
       <section class="Metric_Card">
-        <div class="Card_Topline">
+        <div class="Card_Top_Line">
           <span class="Card_Label">RECENT ACTIVITY</span>
           <a href="#" class="Feed_Action_Link">VIEW ALL</a>
         </div>
@@ -241,8 +241,8 @@
         </div>
       </section>
 
-      <!-- Sticky Action Button -->
-      <button class="Fab_Trigger" onclick="alert('Log outflow sheet coming next')">
+      <!-- Log Button -->
+      <button class="Fab_Trigger" onclick="open_spend_sheet()">
         <svg class="Fab_Icon" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5">
           <line x1="12" y1="5" x2="12" y2="19"></line>
           <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -255,5 +255,81 @@
 
   <script src="../../shared/js/navbar.js"></script>
   <script src="./js/home.js"></script>
+
+  <!-- LOG SPEND BOTTOM SHEET -->
+  <div class="Sheet_Backdrop" id="spend-sheet-backdrop" onclick="close_spend_sheet()"></div>
+
+  <section class="Spend_Sheet" id="spend-sheet">
+    <!-- Undo Recovery Toast -->
+    <div class="Undo_Toast" id="undo-toast">
+      <span class="Undo_Text" id="undo-toast-text">Deleted</span>
+      <button class="Undo_Action_Btn" id="undo-action-btn">UNDO</button>
+    </div>
+
+    <div class="Sheet_Grabber"></div>
+
+    <div class="Sheet_Header">
+      <span class="Sheet_Title">TOTAL EXPENDITURE</span>
+      <button class="Sheet_Close_Btn" onclick="close_spend_sheet()" aria-label="Close">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </button>
+    </div>
+
+    <!-- Amount Hero Field -->
+    <div class="Hero_Input_Wrap">
+      <span class="Hero_Currency">₹</span>
+      <input 
+        type="number" 
+        id="spend-amount-input" 
+        class="Hero_Amount_Input" 
+        placeholder="0.00" 
+        step="0.01" 
+        inputmode="decimal" 
+      />
+    </div>
+
+    <!-- Category Selector -->
+    <div class="Sheet_Field_Group">
+      <div class="Field_Top_Line">
+        <span class="Field_Label">CATEGORY</span>
+      </div>
+
+      <div class="Category_Chip_Grid" id="cat-chip-grid">
+        <!-- Rendered dynamically by home.js -->
+      </div>
+
+      <!-- Inline Input when typing a new custom category -->
+      <div class="Custom_Cat_Input_Wrap" id="custom-cat-input-wrap" style="display: none;">
+        <input 
+          type="text" 
+          id="custom-cat-field" 
+          class="Sheet_Text_Input" 
+          placeholder="New category name..." 
+          maxlength="16"
+        />
+        <button type="button" class="Custom_Cat_Confirm_Btn" onclick="confirm_custom_category()">ADD</button>
+      </div>
+    </div>
+
+    <!-- Note Field -->
+    <div class="Sheet_Field_Group">
+      <span class="Field_Label">NOTE</span>
+      <input 
+        type="text" 
+        id="spend-note-input" 
+        class="Sheet_Text_Input" 
+        placeholder="e.g. Swiggy, Metro, Stationery" 
+        autocomplete="off" 
+      />
+    </div>
+
+    <!-- Submit Action -->
+    <button class="Sheet_Commit_Btn" onclick="submit_spend()">
+      RECORD ENTRY
+    </button>
+  </section>
 </body>
 </html>

@@ -193,12 +193,12 @@
 .Seg_Dining_Color { stroke: #e5484d; }
 .Seg_Housing_Color { stroke: #46a758; }
 .Seg_Transit_Color { stroke: #3e63dd; }
-.Seg_Supplies_Color { stroke: #e54d2e; }
+.Seg_Supplies_Color { stroke: #f1e724; }
 
 .Seg_Dining_Bg { background-color: #e5484d; }
 .Seg_Housing_Bg { background-color: #46a758; }
 .Seg_Transit_Bg { background-color: #3e63dd; }
-.Seg_Supplies_Bg { background-color: #e54d2e; }
+.Seg_Supplies_Bg { background-color: #f1e724;; }
 
 .Donut_Inner_Badge {
   position: absolute;
@@ -356,4 +356,355 @@
   height: 14px !important;
   stroke: #4dabf7;
   flex-shrink: 0;
+}
+
+/* --- LOG SPEND BOTTOM SHEET --- */
+.Sheet_Backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+
+.Sheet_Backdrop.Is_Open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.Spend_Sheet {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 100%);
+  width: 100%;
+  max-width: 440px;
+  background-color: var(--boxbg, #121214);
+  border: 1px solid var(--bordercol, rgba(255, 255, 255, 0.08));
+  border-bottom: none;
+  border-radius: 20px 20px 0 0;
+  padding: 16px 20px 28px 20px;
+  z-index: 101;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 -16px 40px rgba(0, 0, 0, 0.9);
+  max-height: 90vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.Spend_Sheet.Is_Open {
+  transform: translate(-50%, 0);
+}
+
+.Sheet_Grabber {
+  width: 36px;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 99px;
+  align-self: center;
+  margin-bottom: -2px;
+}
+
+.Sheet_Header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.Sheet_Title {
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--textdim, #71717a);
+}
+
+.Sheet_Close_Btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--bordercol, rgba(255, 255, 255, 0.08));
+  color: var(--textdim, #71717a);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.Sheet_Close_Btn:hover, .Sheet_Close_Btn:active {
+  color: var(--textmain, #f4f4f5);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+/* Hero Amount Field */
+.Hero_Input_Wrap {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 6px;
+  padding: 6px 0 10px 0;
+  border-bottom: 1px solid var(--bordercol, rgba(255, 255, 255, 0.08));
+  padding-left: 70px;
+}
+
+.Hero_Currency {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--textdim, #71717a);
+  font-family: monospace;
+}
+
+.Hero_Amount_Input {
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: monospace;
+  font-size: 38px;
+  font-weight: 800;
+  color: var(--textmain, #f4f4f5);
+  width: 170px;
+  text-align: left;
+}
+
+.Hero_Amount_Input::-webkit-outer-spin-button,
+.Hero_Amount_Input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Form Groups */
+.Sheet_Field_Group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding-bottom: 5px;;
+}
+
+.Field_Top_Line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 10px;
+}
+
+.Field_Label {
+  font-family: monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--textdim, #71717a);
+  letter-spacing: 0.06em;
+}
+
+/* Category Grid & Chips */
+.Category_Chip_Grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+
+.Cat_Chip {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background-color: rgba(255, 255, 255, 0.02);
+  border: 1px solid var(--bordercol, rgba(255, 255, 255, 0.08));
+  padding: 9px 8px;
+  border-radius: 8px;
+  color: var(--textmain, #f4f4f5);
+  font-family: monospace;
+  font-size: 11px;
+  cursor: pointer;
+  transition: border-color 0.15s, background-color 0.15s;
+  user-select: none;
+  box-sizing: border-box;
+}
+
+.Cat_Chip.Is_Selected {
+  border-color: rgba(255, 255, 255, 0.35);
+  background-color: rgba(255, 255, 255, 0.08);
+  font-weight: 700;
+}
+
+.Chip_Dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.Chip_Text {
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-align: left;
+}
+
+.Chip_Del_Trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 3px;
+  font-size: 13px;
+  line-height: 1;
+  color: var(--textdim, #71717a);
+  opacity: 0.7;
+  transition: opacity 0.15s, color 0.15s, background-color 0.15s;
+  flex-shrink: 0;
+}
+
+.Chip_Del_Trigger:hover {
+  opacity: 1;
+  color: #ef4444;
+  background-color: rgba(239, 68, 68, 0.15);
+}
+
+/* Preset Category Dots */
+.Dot_Dining   { background-color: #e5484d; }
+.Dot_Housing  { background-color: #46a758; }
+.Dot_Transit  { background-color: #3e63dd; }
+.Dot_Supplies { background-color: #e54d2e; }
+.Dot_Misc     { background-color: #8e8e93; }
+
+/* + Custom Button */
+.Add_Custom_Chip_Btn {
+  border-style: dashed;
+  color: var(--textdim, #71717a);
+  justify-content: center;
+}
+
+.Add_Custom_Chip_Btn.Is_Selected {
+  border-style: solid;
+  color: var(--textmain, #f4f4f5);
+}
+
+/* Inline Custom Input */
+.Custom_Cat_Input_Wrap {
+  margin-top: 4px;
+  display: flex;
+  gap: 6px;
+}
+
+.Custom_Cat_Input_Wrap input {
+  flex: 1;
+}
+
+.Custom_Cat_Confirm_Btn {
+  background-color: rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--bordercol, rgba(255, 255, 255, 0.08));
+  color: var(--textmain, #f4f4f5);
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 0 12px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.Custom_Cat_Confirm_Btn:hover {
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* Inputs & Submit */
+.Sheet_Text_Input {
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.03);
+  border: 1px solid var(--bordercol, rgba(255, 255, 255, 0.08));
+  color: var(--textmain, #f4f4f5);
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-family: monospace;
+  outline: none;
+  box-sizing: border-box;
+}
+
+.Sheet_Text_Input:focus {
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.Sheet_Commit_Btn {
+  background-color: #f4f4f5;
+  color: #09090b;
+  border: none;
+  border-radius: 8px;
+  padding: 12px;
+  font-family: monospace;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: background-color 0.15s ease, transform 0.08s ease;
+}
+
+.Sheet_Commit_Btn:hover {
+  background-color: #ffffff;
+}
+
+.Sheet_Commit_Btn:active {
+  transform: scale(0.98);
+}
+
+/* Undo Toast */
+.Undo_Toast {
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%) translateY(-20px);
+  background-color: #1c1c20;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 105;
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
+  width: calc(100% - 40px);
+  max-width: 380px;
+  box-sizing: border-box;
+}
+
+.Undo_Toast.Is_Visible {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.Undo_Text {
+  font-family: monospace;
+  font-size: 11px;
+  color: var(--textmain, #f4f4f5);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.Undo_Action_Btn {
+  background: none;
+  border: none;
+  color: #38bdf8;
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  text-decoration: underline;
 }
