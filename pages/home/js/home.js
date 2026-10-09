@@ -27,7 +27,58 @@ var COLOR_CYCLE = [
 
 var selected_category = "Dining";
 var last_deleted_item = null;
-var undo_timer = null;
+var undo_notification_timer = null;
+var pending_revert_action = null;
+
+/* ========================================== UNDO NOTIFICATION ENGINE ========================================== */
+
+function dismiss_undo_notification() {
+  var notification_banner = document.getElementById("undo-notification-banner");
+  if (notification_banner) {
+    notification_banner.classList.remove("Active");
+  }
+
+  if (undo_notification_timer !== null) {
+    clearTimeout(undo_notification_timer);
+    undo_notification_timer = null;
+  }
+
+  pending_revert_action = null;
+}
+
+function show_undo_notification(display_text, revert_action_function) {
+  var notification_banner = document.getElementById("undo-notification-banner");
+  var notification_text = document.getElementById("undo-notification-text");
+
+  if (!notification_banner || !notification_text) {
+    return;
+  }
+
+  notification_text.innerText = display_text;
+
+  if (typeof revert_action_function === "function") {
+    pending_revert_action = revert_action_function;
+  } else {
+    pending_revert_action = null;
+  }
+
+  notification_banner.classList.add("Active");
+
+  if (undo_notification_timer !== null) {
+    clearTimeout(undo_notification_timer);
+  }
+
+  undo_notification_timer = setTimeout(function() {
+    dismiss_undo_notification();
+  }, 5000);
+}
+
+function recalculate_and_refresh_dashboard() {
+  calculate_total_spent();
+  render_recent_activity();
+  render_donut_chart();
+  render_week_bar_chart();
+}
 
 function get_custom_categories() {
   var stored = localStorage.getItem("ledger_custom_cats_v3");
@@ -208,20 +259,20 @@ function delete_category(cat_name) {
 }
 
 function trigger_undo_toast(cat_name) {
-  var toast = document.getElementById("undo-toast");
-  var text = document.getElementById("undo-toast-text");
-  text.innerText = 'Removed "' + cat_name + '"';
+  show_undo_notification('Removed "' + cat_name + '"', function() {
+    if (last_deleted_item === null) {
+      return;
+    }
 
-  toast.classList.add("Is_Visible");
+    var custom_list = get_custom_categories();
+    custom_list.splice(last_deleted_item.index, 0, last_deleted_item.item);
+    save_custom_categories(custom_list);
 
-  if (undo_timer !== null) {
-    clearTimeout(undo_timer);
-  }
-
-  undo_timer = setTimeout(function() {
-    toast.classList.remove("Is_Visible");
+    selected_category = last_deleted_item.item.name;
     last_deleted_item = null;
-  }, 4500);
+
+    render_all_chips();
+  });
 }
 
 // Open / Close Drawer
@@ -237,16 +288,16 @@ function close_spend_sheet() {
   document.getElementById("spend-sheet-backdrop").classList.remove("Is_Open");
   document.getElementById("spend-sheet").classList.remove("Is_Open");
   var input_wrap = document.getElementById("custom-cat-input-wrap");
-  if (input_wrap) input_wrap.style.display = "none";
-  var toast = document.getElementById("undo-toast");
-  if (toast) toast.classList.remove("Is_Visible");
+  if (input_wrap) {
+    input_wrap.style.display = "none";
+  }
 }
 
 function submit_spend() {
   var amount_input = document.getElementById("spend-amount-input");
   var note_input = document.getElementById("spend-note-input");
 
-  var amount = parseFloat(amount_input.value);
+  var amount = Number(parseFloat(amount_input.value));
   var title = note_input.value.trim();
 
   if (title === "") {
@@ -258,7 +309,6 @@ function submit_spend() {
     return;
   }
 
-  // 1. Create the transaction record
   var new_tx = {
     id: Date.now(),
     amount: amount,
@@ -267,17 +317,30 @@ function submit_spend() {
     timestamp: new Date().toISOString()
   };
 
-  // 2. Save it to localStorage
   var history = get_history();
   history.unshift(new_tx);
   save_history(history);
 
-  // 3. Recalculate total spent display, render the most recent activity
-  calculate_total_spent();
-  render_recent_activity();
-  render_donut_chart();
+  recalculate_and_refresh_dashboard();
 
-  // 4. Reset inputs & close
+  var removed_tx_id = new_tx.id;
+  show_undo_notification('Removed "' + title + '"', function() {
+    var current_history = get_history();
+    var remaining_history = [];
+    var index = 0;
+
+    while (index < current_history.length) {
+      var current_item = current_history[index];
+      if (current_item.id !== removed_tx_id) {
+        remaining_history.push(current_item);
+      }
+      index = index + 1;
+    }
+
+    save_history(remaining_history);
+    recalculate_and_refresh_dashboard();
+  });
+
   amount_input.value = "";
   note_input.value = "";
   close_spend_sheet();
@@ -292,24 +355,13 @@ document.addEventListener("DOMContentLoaded", function() {
   render_week_bar_chart();
   
 
-  var undo_btn = document.getElementById("undo-action-btn");
-  if (undo_btn) {
-    undo_btn.addEventListener("click", function() {
-      if (last_deleted_item === null) return;
-
-      var custom_list = get_custom_categories();
-      custom_list.splice(last_deleted_item.index, 0, last_deleted_item.item);
-      save_custom_categories(custom_list);
-
-      selected_category = last_deleted_item.item.name;
-      last_deleted_item = null;
-
-      if (undo_timer !== null) {
-        clearTimeout(undo_timer);
+  var undo_notification_button = document.getElementById("undo-notification-button");
+  if (undo_notification_button) {
+    undo_notification_button.addEventListener("click", function() {
+      if (typeof pending_revert_action === "function") {
+        pending_revert_action();
       }
-      document.getElementById("undo-toast").classList.remove("Is_Visible");
-
-      render_all_chips();
+      dismiss_undo_notification();
     });
   }
 

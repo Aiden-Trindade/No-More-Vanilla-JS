@@ -661,36 +661,35 @@
   transform: scale(0.98);
 }
 
-/* Undo Toast */
-.Undo_Toast {
-  position: absolute;
-  top: 12px;
+/* ========================================== UNDO NOTIFICATION ========================================== */
+.Undo_Notification_Banner {
+  position: fixed;
   left: 50%;
-  transform: translateX(-50%) translateY(-20px);
-  background-color: #1c1c20;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 8px;
-  padding: 8px 14px;
+  bottom: 24px;
+  transform: translateX(-50%) translateY(18px);
+  background-color: rgba(28, 28, 32, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  padding: 10px 14px;
   display: flex;
   align-items: center;
   gap: 12px;
-  z-index: 105;
+  z-index: 120;
   opacity: 0;
   pointer-events: none;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6);
-  width: calc(100% - 40px);
-  max-width: 380px;
+  transition: transform 0.22s ease, opacity 0.22s ease;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
+  width: min(380px, calc(100% - 28px));
   box-sizing: border-box;
 }
 
-.Undo_Toast.Is_Visible {
+.Undo_Notification_Banner.Active {
   transform: translateX(-50%) translateY(0);
   opacity: 1;
   pointer-events: auto;
 }
 
-.Undo_Text {
+.Undo_Notification_Text {
   font-family: monospace;
   font-size: 11px;
   color: var(--textmain, #f4f4f5);
@@ -700,14 +699,23 @@
   text-overflow: ellipsis;
 }
 
-.Undo_Action_Btn {
-  background: none;
-  border: none;
-  color: #38bdf8;
+.Undo_Notification_Button {
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  color: #7dd3fc;
+  border-radius: 6px;
+  padding: 6px 10px;
   font-family: monospace;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.08em;
   cursor: pointer;
-  text-decoration: underline;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.Undo_Notification_Button:hover,
+.Undo_Notification_Button:active {
+  background: rgba(56, 189, 248, 0.18);
+  border-color: rgba(125, 211, 252, 0.6);
+  color: #e0f2fe;
 }
