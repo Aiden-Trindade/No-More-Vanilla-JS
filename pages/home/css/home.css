@@ -182,11 +182,14 @@
   width: 100%;
   height: 100%;
   transform: rotate(-90deg);
+  transform-origin: 50% 50%;   /*For Safari Users, if there are any lol */
 }
+
 
 .Donut_Path {
   fill: none;
-  stroke-width: 16;
+  stroke-width: 14;
+  stroke-linecap: butt;
 }
 
 /* precise video color palette */
