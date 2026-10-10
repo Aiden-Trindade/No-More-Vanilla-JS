@@ -1,0 +1,496 @@
+/* ==========================================================================
+   history.css
+   Page-specific styles only. The shell (.App_Shell), body, header, capsule nav
+   and colour tokens all come from shared/css/global.css so both pages match.
+   ========================================================================== */
+
+/* viewport layout (same as .Home_Viewport) */
+.History_Viewport {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 18px 96px 18px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  gap: 20px;
+  width: 100%;
+}
+
+/* common card styling (same as .Metric_Card) */
+.Metric_Card {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: var(--boxbg);
+  border: 1px solid var(--bordercol);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.History_Card_Top_Line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.Card_Label {
+  font-size: 11px;
+  color: var(--textdim);
+  font-family: monospace;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding-left: 7px;
+}
+
+.Meta_Tag {
+  font-size: 10px;
+  color: var(--textdim);
+  font-family: monospace;
+}
+
+/* back link pill (same look as the dashboard capsule button) */
+.Back_Pill_Link {
+  display: inline-flex;
+  align-items: center;
+  background-color: var(--boxbg);
+  border: 1px solid var(--borderbold);
+  border-radius: 99px;
+  padding: 10px 16px;
+  color: var(--textmain);
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.Back_Pill_Link:hover {
+  border-color: #ffffff;
+}
+
+/* range filter chips */
+.Range_Filter_Container {
+  display: flex;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.Filter_Chip {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--boxbg);
+  border: 1px solid var(--borderbold);
+  border-radius: 99px;
+  padding: 10px 12px;
+  color: var(--textdim);
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.Filter_Chip:hover {
+  border-color: #ffffff;
+}
+
+.Filter_Chip.Is_Active {
+  background-color: var(--hoverbg);
+  border-color: #ffffff;
+  color: var(--textmain);
+}
+
+/* period spend (same as the dashboard amount block) */
+.Amount_Display {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-top: 18px;
+  margin-bottom: 4px;
+}
+
+.Currency_Symbol {
+  font-size: 26px;
+  font-weight: 600;
+  color: var(--textmain);
+}
+
+.Amount_Value {
+  font-size: 38px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--textmain);
+  line-height: 1;
+}
+
+/* timeline */
+.Timeline_Container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+}
+
+.Day_Group_Block {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.Day_Group_Header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 7px 8px 7px;
+  border-bottom: 1px solid var(--bordercol);
+}
+
+.Day_Group_Date {
+  font-size: 11px;
+  color: var(--textdim);
+  font-family: monospace;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.Day_Group_Subtotal {
+  font-size: 10px;
+  color: var(--textdim);
+  font-family: monospace;
+}
+
+.Transaction_List {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.Transaction_Item_Card {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: var(--boxbg);
+  border: 1px solid var(--bordercol);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.Transaction_Item_Card:hover,
+.Transaction_Item_Card:focus {
+  border-color: rgba(255, 255, 255, 0.35);
+  background-color: var(--hoverbg);
+  outline: none;
+}
+
+.Item_Left_Col {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.Item_Dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.Item_Identity {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.Item_Primary_Note {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--textmain);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.Item_Meta_Details {
+  font-size: 10px;
+  color: var(--textdim);
+  font-family: monospace;
+  padding-top: 5px;
+}
+
+.Item_Amount_Text {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--textmain);
+  font-family: monospace;
+  flex-shrink: 0;
+}
+
+.Empty_State_Notice {
+  padding: 20px;
+  text-align: center;
+  font-family: monospace;
+  font-size: 11px;
+  color: var(--textdim);
+  border: 1px dashed var(--bordercol);
+  border-radius: 8px;
+}
+
+/* --- DETAIL BOTTOM SHEET (mirrors the Log Spend sheet) --- */
+.Sheet_Backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.22s ease;
+}
+
+.Sheet_Backdrop.Is_Open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.Detail_Sheet {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 100%);
+  width: 100%;
+  max-width: 440px;
+  background-color: var(--boxbg);
+  border: 1px solid var(--bordercol);
+  border-bottom: none;
+  border-radius: 20px 20px 0 0;
+  padding: 16px 20px 28px 20px;
+  z-index: 101;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 -16px 40px rgba(0, 0, 0, 0.9);
+  max-height: 90vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.Detail_Sheet.Is_Open {
+  transform: translate(-50%, 0);
+}
+
+.Sheet_Grabber {
+  width: 36px;
+  height: 4px;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 99px;
+  align-self: center;
+  margin-bottom: -2px;
+}
+
+.Sheet_Header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.Sheet_Title {
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: var(--textdim);
+}
+
+.Sheet_Close_Btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--bordercol);
+  color: var(--textdim);
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  cursor: pointer;
+  padding: 0;
+}
+
+.Sheet_Close_Btn:hover,
+.Sheet_Close_Btn:active {
+  color: var(--textmain);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.Detail_Hero {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 4px;
+  padding: 6px 0 14px 0;
+  border-bottom: 1px solid var(--bordercol);
+}
+
+.Detail_Hero_Currency {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--textdim);
+  font-family: monospace;
+}
+
+.Detail_Hero_Amount {
+  font-size: 38px;
+  font-weight: 800;
+  color: var(--textmain);
+  font-family: monospace;
+  letter-spacing: -0.02em;
+}
+
+.Detail_Field_List {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.Detail_Field_Row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.Detail_Field_Row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.Field_Label {
+  font-family: monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--textdim);
+  letter-spacing: 0.06em;
+  flex-shrink: 0;
+}
+
+.Field_Value {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--textmain);
+  text-align: right;
+  word-break: break-word;
+}
+
+.Field_Value_With_Dot {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.Detail_Cat_Dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.Sheet_Delete_Btn {
+  background-color: rgba(229, 72, 77, 0.12);
+  border: 1px solid rgba(229, 72, 77, 0.4);
+  color: #e5484d;
+  border-radius: 8px;
+  padding: 12px;
+  font-family: monospace;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  margin-top: 4px;
+  transition: background-color 0.15s ease, transform 0.08s ease;
+}
+
+.Sheet_Delete_Btn:hover {
+  background-color: rgba(229, 72, 77, 0.2);
+}
+
+.Sheet_Delete_Btn:active {
+  transform: scale(0.98);
+}
+
+/* ========================================== UNDO NOTIFICATION (identical to home.css) ========================================== */
+.Undo_Notification_Banner {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%) translateY(18px);
+  background-color: rgba(28, 28, 32, 0.96);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 10px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 120;
+  opacity: 0;
+  pointer-events: none;
+  transition: transform 0.22s ease, opacity 0.22s ease;
+  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
+  width: min(380px, calc(100% - 28px));
+  box-sizing: border-box;
+}
+
+.Undo_Notification_Banner.Active {
+  transform: translateX(-50%) translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.Undo_Notification_Text {
+  font-family: monospace;
+  font-size: 11px;
+  color: var(--textmain);
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.Undo_Notification_Button {
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.28);
+  color: #7dd3fc;
+  border-radius: 6px;
+  padding: 6px 10px;
+  font-family: monospace;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.Undo_Notification_Button:hover,
+.Undo_Notification_Button:active {
+  background: rgba(56, 189, 248, 0.18);
+  border-color: rgba(125, 211, 252, 0.6);
+  color: #e0f2fe;
+}

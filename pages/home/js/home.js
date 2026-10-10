@@ -5,7 +5,7 @@ console.log("home view loaded:", is_ready);
 // --- LOG SPEND SHEET LOGIC ---
 
 var PRESET_CATEGORIES = [
-  { name: "Dining", dotClass: "Dot_Dining" },
+  { name: "Food", dotClass: "Dot_Food" },
   { name: "Housing", dotClass: "Dot_Housing" },
   { name: "Transit", dotClass: "Dot_Transit" },
   { name: "Supplies", dotClass: "Dot_Supplies" },
@@ -18,14 +18,26 @@ var COLOR_CYCLE = [
   "#eab308", 
   "#ec4899", 
   "#10b981", 
-  "#e5484d", 
+  "#ef4444", 
   "#46a758", 
   "#3e63dd", 
   "#e54d2e",
   "#8e8e93"  
 ];
 
-var selected_category = "Dining";
+var CATEGORY_COLOR_MAP = {
+  Food: "#ef4444",
+  Dining: "#ef4444",
+  Housing: "#46a758",
+  Transit: "#3e63dd",
+  Shopping: "#10b981",
+  Entertainment: "#8b5cf6",
+  Supplies: "#e54d2e",
+  Misc: "#8e8e93",
+  Other: "#ec4899"
+};
+
+var selected_category = "Food";
 var last_deleted_item = null;
 var undo_notification_timer = null;
 var pending_revert_action = null;
@@ -251,7 +263,7 @@ function delete_category(cat_name) {
   save_custom_categories(custom_list);
 
   if (selected_category === cat_name) {
-    selected_category = "Dining";
+    selected_category = "Food";
   }
 
   render_all_chips();
@@ -419,17 +431,29 @@ function calculate_total_spent() {
 
 // --- RENDER: RECENT ACTIVITY ---
 function get_category_color(cat_name) {
+  var normalized_name = String(cat_name);
+  if (normalized_name === "Dining") {
+    normalized_name = "Food";
+  }
+
   for (var i = 0; i < PRESET_CATEGORIES.length; i++) {
-    if (PRESET_CATEGORIES[i].name === cat_name) {
-      return null;
+    if (PRESET_CATEGORIES[i].name === normalized_name) {
+      if (CATEGORY_COLOR_MAP[normalized_name]) {
+        return CATEGORY_COLOR_MAP[normalized_name];
+      }
+      break;
     }
   }
 
   var custom_list = get_custom_categories();
   for (var j = 0; j < custom_list.length; j++) {
-    if (custom_list[j].name === cat_name) {
-      return custom_list[j].color; 
+    if (custom_list[j].name === normalized_name) {
+      return custom_list[j].color;
     }
+  }
+
+  if (CATEGORY_COLOR_MAP[normalized_name]) {
+    return CATEGORY_COLOR_MAP[normalized_name];
   }
 
   return "#8e8e93";
@@ -462,12 +486,17 @@ function render_recent_activity() {
   for (var i = 0; i < slice.length; i++) {
     var tx = slice[i];
     var custom_color = get_category_color(tx.category);
+    var category_name_for_class = String(tx.category);
+
+    if (category_name_for_class === "Dining") {
+      category_name_for_class = "Food";
+    }
 
     var dot_markup = "";
     if (custom_color) {
       dot_markup = '<span class="Tx_Dot" style="background-color: ' + custom_color + ';"></span>';
     } else {
-      dot_markup = '<span class="Tx_Dot Seg_' + tx.category + '_Bg"></span>';
+      dot_markup = '<span class="Tx_Dot Seg_' + category_name_for_class + '_Bg"></span>';
     }
 
     var time_sub = tx.category + " • " + format_tx_datetime(tx.timestamp);
@@ -568,11 +597,15 @@ function render_donut_chart() {
 
   // Preset hex fallback lookup in case class names fail
   var preset_hex_map = {
-    Dining: "#e5484d",
+    Food: "#ef4444",
+    Dining: "#ef4444",
     Housing: "#46a758",
     Transit: "#3e63dd",
-    Supplies: "#eab308",
-    Misc: "#8e8e93"
+    Shopping: "#10b981",
+    Entertainment: "#8b5cf6",
+    Supplies: "#e54d2e",
+    Misc: "#8e8e93",
+    Other: "#ec4899"
   };
 
   // 4. Render slices & legend
@@ -627,27 +660,23 @@ function render_donut_chart() {
 function render_week_bar_chart() {
   var frame = document.getElementById("week-bar-chart-frame");
   var total_stat = document.getElementById("week-total-stat");
-  if (!frame) return;
+  if (!frame) {
+    return;
+  }
 
   var history = get_history();
 
-  // Keep the baseline line element, clear existing columns
   frame.innerHTML = '<div class="Bar_Chart_Baseline"></div>';
 
   var now = new Date();
-  // In JS: Sun=0, Mon=1, Tue=2, Wed=3, Thu=4, Fri=5, Sat=6
-  // Convert so Mon=0, Tue=1, ..., Sun=6
   var current_day_idx = (now.getDay() + 6) % 7;
-
-  // Find Monday of the current week at 00:00:00
   var monday = new Date(now.getFullYear(), now.getMonth(), now.getDate() - current_day_idx);
   monday.setHours(0, 0, 0, 0);
 
   var day_labels = ["M", "T", "W", "T", "F", "S", "S"];
   var week_days = [];
 
-  // Build 7 date slots for Monday -> Sunday
-  for (var i = 0; i < 7; i++) {
+  for (var i = 0; i < 7; i = i + 1) {
     var d = new Date(monday.getFullYear(), monday.getMonth(), monday.getDate() + i);
     var yyyy = d.getFullYear();
     var mm = String(d.getMonth() + 1).padStart(2, "0");
@@ -658,63 +687,88 @@ function render_week_bar_chart() {
       date_key: key,
       label: day_labels[i],
       total: 0,
-      is_today: (i === current_day_idx)
+      is_today: i === current_day_idx
     });
   }
 
-  // Aggregate spending from history for this week
   var week_total_spend = 0;
 
-  for (var j = 0; j < history.length; j++) {
+  for (var j = 0; j < history.length; j = j + 1) {
     var tx = history[j];
-    var tx_date = tx.timestamp.split("T")[0];
+    var tx_date = String(tx.timestamp).split("T")[0];
+    var tx_amount = Number(tx.amount);
 
-    for (var k = 0; k < week_days.length; k++) {
+    if (isNaN(tx_amount)) {
+      tx_amount = 0;
+    }
+
+    for (var k = 0; k < week_days.length; k = k + 1) {
       if (week_days[k].date_key === tx_date) {
-        week_days[k].total += tx.amount;
-        week_total_spend += tx.amount;
+        week_days[k].total = Number(week_days[k].total) + tx_amount;
+        week_total_spend = Number(week_total_spend) + tx_amount;
         break;
       }
     }
   }
 
-  // Update header total
   if (total_stat) {
-    total_stat.innerText = "₹" + week_total_spend.toLocaleString("en-IN", {
+    total_stat.innerText = "₹" + Number(week_total_spend).toLocaleString("en-IN", {
       maximumFractionDigits: 0
     }) + " TOTAL";
   }
 
-  // Find the peak day for proportional scaling
   var max_spend = 0;
-  for (var m = 0; m < week_days.length; m++) {
-    if (week_days[m].total > max_spend) {
-      max_spend = week_days[m].total;
+  for (var m = 0; m < week_days.length; m = m + 1) {
+    if (Number(week_days[m].total) > max_spend) {
+      max_spend = Number(week_days[m].total);
     }
   }
 
-  // Render the 7 bar columns
-  for (var n = 0; n < week_days.length; n++) {
+  for (var n = 0; n < week_days.length; n = n + 1) {
     var day = week_days[n];
-    var height_percent = max_spend > 0 ? (day.total / max_spend) * 100 : 0;
+    var height_percent = 0;
+    if (max_spend > 0) {
+      height_percent = (Number(day.total) / Number(max_spend)) * 100;
+    }
 
-    // Use at least 4% height if money was spent so tiny amounts are visible
-    if (day.total > 0 && height_percent < 4) {
+    if (Number(day.total) > 0 && height_percent < 4) {
       height_percent = 4;
+    }
+
+    if (height_percent > 95) {
+      height_percent = 95;
     }
 
     var col = document.createElement("div");
     col.className = "Bar_Column";
+    col.style.borderRadius = "0";
 
-    var fill_classes = "Bar_Fill" + (day.is_today ? " Bar_Highlight" : "");
-    var label_classes = "Day_Label" + (day.is_today ? " Active_Day" : "");
+    var fill_classes = "Bar_Fill";
+    if (day.is_today) {
+      fill_classes = fill_classes + " Bar_Highlight";
+    }
 
-    col.innerHTML =
-      '<div class="Bar_Track">' +
-        '<div class="' + fill_classes + '" style="height: ' + height_percent.toFixed(1) + '%;"></div>' +
-      '</div>' +
-      '<span class="' + label_classes + '">' + day.label + '</span>';
+    var label_classes = "Day_Label";
+    if (day.is_today) {
+      label_classes = label_classes + " Active_Day";
+    }
 
+    var bar_fill = document.createElement("div");
+    bar_fill.className = fill_classes;
+    bar_fill.style.height = String(height_percent.toFixed(1)) + "%";
+    bar_fill.style.borderRadius = "0";
+
+    var bar_track = document.createElement("div");
+    bar_track.className = "Bar_Track";
+    bar_track.style.borderRadius = "0";
+    bar_track.appendChild(bar_fill);
+
+    var label = document.createElement("span");
+    label.className = label_classes;
+    label.textContent = day.label;
+
+    col.appendChild(bar_track);
+    col.appendChild(label);
     frame.appendChild(col);
   }
 }

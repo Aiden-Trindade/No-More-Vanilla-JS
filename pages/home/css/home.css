@@ -106,16 +106,18 @@
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
-  height: 110px;
-  padding-top: 10px;
+  height: 120px;
+  padding-top: 24px;
   margin-top: 4px;
+  overflow: visible;
+  box-sizing: border-box;
 }
 
 .Bar_Chart_Baseline {
   position: absolute;
   left: 0;
   right: 0;
-  bottom: 22px;
+  bottom: 18px;
   height: 1px;
   background-color: var(--bordercol);
   z-index: 1;
@@ -130,24 +132,34 @@
   justify-content: flex-end;
   z-index: 2;
   flex: 1;
+  margin: 0;
+  padding: 0;
+  border-radius: 0;
 }
 
 .Bar_Track {
   width: 14px;
-  height: 75px;
+  height: calc(100% - 18px);
   display: flex;
   align-items: flex-end;
   background: transparent;
+  border-radius: 0;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
 }
 
 .Bar_Fill {
+  display: block;
   width: 100%;
-  background-color: #2b6cb0; /* industrial muted blue from video */
-  border-radius: 2px 2px 0 0;
+  min-height: 0;
+  background-color: #2b6cb0;
+  border-radius: 0;
 }
 
 .Bar_Highlight {
-  background-color: #3182ce;
+  background-color: #3b82f6;
+  border-radius: 0;
 }
 
 .Day_Label {
@@ -193,15 +205,19 @@
 }
 
 /* precise video color palette */
-.Seg_Dining_Color { stroke: #e5484d; }
+.Seg_Food_Color { stroke: #ef4444; }
 .Seg_Housing_Color { stroke: #46a758; }
 .Seg_Transit_Color { stroke: #3e63dd; }
-.Seg_Supplies_Color { stroke: #f1e724; }
+.Seg_Supplies_Color { stroke: #e54d2e; }
+.Seg_Shopping_Color { stroke: #10b981; }
+.Seg_Entertainment_Color { stroke: #8b5cf6; }
 
-.Seg_Dining_Bg { background-color: #e5484d; }
+.Seg_Food_Bg { background-color: #ef4444; }
 .Seg_Housing_Bg { background-color: #46a758; }
 .Seg_Transit_Bg { background-color: #3e63dd; }
-.Seg_Supplies_Bg { background-color: #f1e724;; }
+.Seg_Supplies_Bg { background-color: #e54d2e; }
+.Seg_Shopping_Bg { background-color: #10b981; }
+.Seg_Entertainment_Bg { background-color: #8b5cf6; }
 
 .Donut_Inner_Badge {
   position: absolute;
@@ -575,11 +591,13 @@
 }
 
 /* Preset Category Dots */
-.Dot_Dining   { background-color: #e5484d; }
-.Dot_Housing  { background-color: #46a758; }
-.Dot_Transit  { background-color: #3e63dd; }
-.Dot_Supplies { background-color: #e54d2e; }
-.Dot_Misc     { background-color: #8e8e93; }
+.Dot_Food        { background-color: #ef4444; }
+.Dot_Housing     { background-color: #46a758; }
+.Dot_Transit     { background-color: #3e63dd; }
+.Dot_Supplies    { background-color: #e54d2e; }
+.Dot_Shopping    { background-color: #10b981; }
+.Dot_Entertainment { background-color: #8b5cf6; }
+.Dot_Misc        { background-color: #8e8e93; }
 
 /* + Custom Button */
 .Add_Custom_Chip_Btn {
