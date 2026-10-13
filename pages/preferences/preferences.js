@@ -110,7 +110,7 @@ function Handle_Save_Name() {
   localStorage.setItem(storage_key_username_str, new_name_str);
   name_input_el.value = new_name_str;
   Update_Brand_Tag(new_name_str);
-  Show_Status_Message("name-status", "// name saved", false);
+  Show_Status_Message("name-status", "Name saved", false);
 }
 
 /* ==========================================================================
@@ -172,7 +172,7 @@ function Handle_Theme_Tile_Click(theme_arg_str) {
   preferences_obj.theme = String(theme_arg_str);
   Write_Json_To_Storage(storage_key_preferences_str, preferences_obj);
 
-  Show_Status_Message("theme-status", "// theme saved", false);
+  Show_Status_Message("theme-status", "Theme saved", false);
 }
 
 /* ==========================================================================
@@ -339,7 +339,7 @@ function Handle_Save_Budgets() {
 
   Write_Json_To_Storage(storage_key_budgets_str, new_budget_obj);
   Render_Budget_Fields();
-  Show_Status_Message("budget-status", "// budgets saved", false);
+  Show_Status_Message("budget-status", "Budgets saved", false);
 }
 
 /* ==========================================================================
