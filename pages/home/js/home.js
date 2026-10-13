@@ -6,10 +6,10 @@ console.log("home view loaded:", is_ready);
 
 var PRESET_CATEGORIES = [
   { name: "Food", dotClass: "Dot_Food" },
-  { name: "Housing", dotClass: "Dot_Housing" },
   { name: "Transit", dotClass: "Dot_Transit" },
-  { name: "Supplies", dotClass: "Dot_Supplies" },
-  { name: "Misc", dotClass: "Dot_Misc" }
+  { name: "Housing", dotClass: "Dot_Housing" },
+  { name: "Shopping", dotClass: "Dot_Shopping" },
+  { name: "General", dotClass: "Dot_General" }
 ];
 
 var COLOR_CYCLE = [
@@ -27,14 +27,11 @@ var COLOR_CYCLE = [
 
 var CATEGORY_COLOR_MAP = {
   Food: "#ef4444",
-  Dining: "#ef4444",
-  Housing: "#46a758",
-  Transit: "#3e63dd",
-  Shopping: "#10b981",
-  Entertainment: "#8b5cf6",
-  Supplies: "#e54d2e",
-  Misc: "#8e8e93",
-  Other: "#ec4899"
+  Transit: "#3b82f6",
+  Housing: "#10b981",
+  Shopping: "#8b5cf6",
+  General: "#64748b",
+  Other: "#64748b"
 };
 
 var selected_category = "Food";
@@ -55,6 +52,7 @@ function dismiss_undo_notification() {
     undo_notification_timer = null;
   }
 
+  last_deleted_item = null;
   pending_revert_action = null;
 }
 
@@ -160,17 +158,23 @@ function render_all_chips() {
 
     (function(category_item) {
       custom_chip.addEventListener("click", function(event) {
-        if (event.target.classList.contains("Chip_Del_Trigger")) {
+        var target_el = event.target;
+        if (target_el && target_el.classList && target_el.classList.contains("Chip_Del_Trigger")) {
+          return;
+        }
+        if (target_el && target_el.closest && target_el.closest(".Chip_Del_Trigger")) {
           return;
         }
         select_category(category_item.name);
       });
 
       var del_btn = custom_chip.querySelector(".Chip_Del_Trigger");
-      del_btn.addEventListener("click", function(event) {
-        event.stopPropagation();
-        delete_category(category_item.name);
-      });
+      if (del_btn) {
+        del_btn.addEventListener("click", function(event) {
+          event.stopPropagation();
+          delete_category(category_item.name);
+        });
+      }
     })(item);
 
     grid.appendChild(custom_chip);
@@ -205,9 +209,18 @@ function toggle_custom_input() {
 
 function confirm_custom_category() {
   var field = document.getElementById("custom-cat-field");
-  var val = field.value.trim();
+  if (!field) {
+    return;
+  }
 
-  if (val === "") return;
+  var val = String(field.value || "").trim();
+  if (val === "") {
+    return;
+  }
+
+  dismiss_undo_notification();
+  last_deleted_item = null;
+  pending_revert_action = null;
 
   var is_duplicate = false;
   for (var i = 0; i < PRESET_CATEGORIES.length; i++) {
@@ -218,15 +231,25 @@ function confirm_custom_category() {
   }
 
   var custom_list = get_custom_categories();
+  if (!Array.isArray(custom_list)) {
+    custom_list = [];
+  }
+
   for (var j = 0; j < custom_list.length; j++) {
-    if (custom_list[j].name.toLowerCase() === val.toLowerCase()) {
+    if (String(custom_list[j].name || "").toLowerCase() === val.toLowerCase()) {
       is_duplicate = true;
       break;
     }
   }
 
   if (is_duplicate === true) {
-    select_category(val);
+    field.value = "";
+    var input_wrap = document.getElementById("custom-cat-input-wrap");
+    if (input_wrap) {
+      input_wrap.style.display = "none";
+    }
+    selected_category = val;
+    render_all_chips();
     return;
   }
 
@@ -238,7 +261,16 @@ function confirm_custom_category() {
 
   custom_list.push(new_item);
   save_custom_categories(custom_list);
-  select_category(val);
+
+  field.value = "";
+  selected_category = val;
+
+  var input_wrap = document.getElementById("custom-cat-input-wrap");
+  if (input_wrap) {
+    input_wrap.style.display = "none";
+  }
+
+  render_all_chips();
 }
 
 function delete_category(cat_name) {
@@ -261,6 +293,12 @@ function delete_category(cat_name) {
 
   custom_list.splice(found_index, 1);
   save_custom_categories(custom_list);
+
+  var budget_obj = JSON.parse(localStorage.getItem("expense_tracker_budgets") || "{}") || {};
+  if (budget_obj[cat_name] !== undefined) {
+    delete budget_obj[cat_name];
+    localStorage.setItem("expense_tracker_budgets", JSON.stringify(budget_obj));
+  }
 
   if (selected_category === cat_name) {
     selected_category = "Food";
@@ -297,6 +335,11 @@ function open_spend_sheet() {
 }
 
 function close_spend_sheet() {
+  var field = document.getElementById("custom-cat-field");
+  if (field && String(field.value || "").trim() !== "") {
+    confirm_custom_category();
+  }
+
   document.getElementById("spend-sheet-backdrop").classList.remove("Is_Open");
   document.getElementById("spend-sheet").classList.remove("Is_Open");
   var input_wrap = document.getElementById("custom-cat-input-wrap");
@@ -336,7 +379,7 @@ function submit_spend() {
   recalculate_and_refresh_dashboard();
 
   var removed_tx_id = new_tx.id;
-  show_undo_notification('Removed "' + title + '"', function() {
+  show_undo_notification('Added " ' + title + ' "', function() {
     var current_history = get_history();
     var remaining_history = [];
     var index = 0;
@@ -382,6 +425,12 @@ document.addEventListener("DOMContentLoaded", function() {
     custom_field.addEventListener("keydown", function(event) {
       if (event.key === "Enter") {
         event.preventDefault();
+        confirm_custom_category();
+      }
+    });
+
+    custom_field.addEventListener("blur", function() {
+      if (String(custom_field.value || "").trim() !== "") {
         confirm_custom_category();
       }
     });
@@ -432,8 +481,15 @@ function calculate_total_spent() {
 // --- RENDER: RECENT ACTIVITY ---
 function get_category_color(cat_name) {
   var normalized_name = String(cat_name);
+
   if (normalized_name === "Dining") {
     normalized_name = "Food";
+  }
+  if (normalized_name === "Misc") {
+    normalized_name = "General";
+  }
+  if (normalized_name === "Supplies") {
+    normalized_name = "Shopping";
   }
 
   for (var i = 0; i < PRESET_CATEGORIES.length; i++) {
@@ -456,7 +512,7 @@ function get_category_color(cat_name) {
     return CATEGORY_COLOR_MAP[normalized_name];
   }
 
-  return "#8e8e93";
+  return "#64748b";
 }
 
 function format_tx_datetime(iso_str) {
@@ -476,7 +532,7 @@ function render_recent_activity() {
   list_box.innerHTML = "";
 
   if (history.length === 0) {
-    list_box.innerHTML = '<div class="Empty_State_Row" style="padding: 20px; text-align: center; font-family: monospace; font-size: 11px; color: #71717a; border: 1px dashed rgba(255,255,255,0.08); border-radius: 8px;">// no_transactions_logged.txt</div>';
+    list_box.innerHTML = '<div class="Empty_State_Row">No data added yet.</div>';
     return;
   }
 
@@ -490,6 +546,12 @@ function render_recent_activity() {
 
     if (category_name_for_class === "Dining") {
       category_name_for_class = "Food";
+    }
+    if (category_name_for_class === "Misc") {
+      category_name_for_class = "General";
+    }
+    if (category_name_for_class === "Supplies") {
+      category_name_for_class = "Shopping";
     }
 
     var dot_markup = "";
@@ -533,7 +595,7 @@ function render_donut_chart() {
   if (history.length === 0) {
     if (badge) badge.innerText = "0 TX";
     svg.innerHTML = '<circle cx="50" cy="50" r="38" fill="none" stroke="#27272a" class="Donut_Path" stroke-dasharray="2 4" />';
-    legend.innerHTML = '<div style="font-family: monospace; font-size: 11px; color: #71717a; padding: 24px 0;">// no_outflow_logged.txt</div>';
+    legend.innerHTML = '<div class="Empty_State_Text">No data added yet.</div>';
     return;
   }
 
@@ -598,14 +660,11 @@ function render_donut_chart() {
   // Preset hex fallback lookup in case class names fail
   var preset_hex_map = {
     Food: "#ef4444",
-    Dining: "#ef4444",
-    Housing: "#46a758",
-    Transit: "#3e63dd",
-    Shopping: "#10b981",
-    Entertainment: "#8b5cf6",
-    Supplies: "#e54d2e",
-    Misc: "#8e8e93",
-    Other: "#ec4899"
+    Transit: "#3b82f6",
+    Housing: "#10b981",
+    Shopping: "#8b5cf6",
+    General: "#64748b",
+    Other: "#64748b"
   };
 
   // 4. Render slices & legend

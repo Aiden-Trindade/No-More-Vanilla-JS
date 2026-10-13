@@ -21,14 +21,11 @@ var month_names = [
 // same preset colours the dashboard uses for its dots
 var preset_category_colors = {
   Food: "#ef4444",
-  Dining: "#ef4444",
-  Housing: "#46a758",
-  Transit: "#3e63dd",
-  Shopping: "#10b981",
-  Entertainment: "#8b5cf6",
-  Supplies: "#e54d2e",
-  Misc: "#8e8e93",
-  Other: "#ec4899"
+  Transit: "#3b82f6",
+  Housing: "#10b981",
+  Shopping: "#8b5cf6",
+  General: "#64748b",
+  Other: "#64748b"
 };
 
 /* ==========================================================================
@@ -127,6 +124,12 @@ function resolve_category_color(category_name) {
   var normalized_category_name = String(category_name);
   if (normalized_category_name === "Dining") {
     normalized_category_name = "Food";
+  }
+  if (normalized_category_name === "Misc") {
+    normalized_category_name = "General";
+  }
+  if (normalized_category_name === "Supplies") {
+    normalized_category_name = "Shopping";
   }
 
   if (preset_category_colors[normalized_category_name]) {
@@ -346,7 +349,7 @@ function render_history_view() {
   if (filtered_transactions.length === 0) {
     var empty_notice = document.createElement("div");
     empty_notice.className = "Empty_State_Notice";
-    empty_notice.textContent = "// no_transactions_in_period.txt";
+    empty_notice.textContent = "No data added.";
     container.appendChild(empty_notice);
     return;
   }

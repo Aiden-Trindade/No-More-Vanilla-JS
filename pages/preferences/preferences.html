@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Ledger Preferences</title>
+  <link rel="stylesheet" href="../../shared/css/global.css" />
+  <link rel="stylesheet" href="../../shared/css/themes.css" />
+  <link rel="stylesheet" href="./preferences.css" />
+</head>
+<body class="page-preferences">
+
+  <div class="App_Shell">
+
+    <div class="Screen_Mask" id="screen-mask"></div>
+
+    <header class="Top_Header">
+      <div>
+        <div class="Greeting_Text">Hello <span id="brand-name">User</span></div>
+        <div class="Date_Text" id="date-box">--</div>
+      </div>
+
+      <!-- Capsule Nav (identical to Dashboard / History) -->
+      <div class="Capsule_Nav" id="capsule-wrap">
+        <div class="Capsule_Btn" id="capsule-btn">
+          <span class="Capsule_Dot"></span>
+          <span class="Capsule_Label">Preferences</span>
+          <svg class="Capsule_Arrow" viewBox="0 0 24 24" fill="none">
+            <polyline points="6 9 12 15 18 9"></polyline>
+          </svg>
+        </div>
+        <nav class="Capsule_Menu">
+          <a href="../home/home.html" class="Menu_Link Home_Style">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+            Dashboard
+          </a>
+          <a href="../history/history.html" class="Menu_Link History_Style">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line></svg>
+            History
+          </a>
+          <a href="../breakdown/breakdown.html" class="Menu_Link Breakdown_Style">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+            Breakdown
+          </a>
+          <a href="preferences.html" class="Menu_Link Preferences_Style Is_Active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            Preferences
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="Pref_Viewport">
+
+      <!-- 1. OPERATOR IDENTITY -->
+      <section class="Metric_Card">
+  
+
+        <div class="Pref_Field_Group">
+          <span class="Field_Label">DISPLAY NAME</span>
+          <input type="text" id="name-input" class="Pref_Input" maxlength="20" autocomplete="off" placeholder="User" />
+        </div>
+
+        <button type="button" class="Pref_Btn Pref_Btn_Primary" id="save-name-btn">SAVE NAME</button>
+        <div class="Status_Note" id="name-status"></div>
+      </section>
+
+      <!-- 2. THEME PROFILE MATRIX -->
+      <section class="Metric_Card">
+        <div class="Pref_Card_Top_Line">
+          <span class="Card_Label">THEME PROFILE</span>
+        </div>
+
+        <div class="Theme_Grid">
+          <button type="button" class="Theme_Tile Tile_Dark_Cool" data-theme="theme_dark_cool">
+            <span class="Preview_Surface">
+              <span class="Preview_Bar"></span>
+              <span class="Preview_Line"></span>
+            </span>
+            <span class="Tile_Label_Row">
+              <span class="Tile_Name">Dark Cool</span>
+              <span class="Tile_State">ACTIVE</span>
+            </span>
+          </button>
+
+          <button type="button" class="Theme_Tile Tile_Dark_Warm" data-theme="theme_dark_warm">
+            <span class="Preview_Surface">
+              <span class="Preview_Bar"></span>
+              <span class="Preview_Line"></span>
+            </span>
+            <span class="Tile_Label_Row">
+              <span class="Tile_Name">Dark Warm</span>
+              <span class="Tile_State">ACTIVE</span>
+            </span>
+          </button>
+
+          <button type="button" class="Theme_Tile Tile_Bright_Cool" data-theme="theme_bright_cool">
+            <span class="Preview_Surface">
+              <span class="Preview_Bar"></span>
+              <span class="Preview_Line"></span>
+            </span>
+            <span class="Tile_Label_Row">
+              <span class="Tile_Name">Bright Cool</span>
+              <span class="Tile_State">ACTIVE</span>
+            </span>
+          </button>
+
+          <button type="button" class="Theme_Tile Tile_Bright_Warm" data-theme="theme_bright_warm">
+            <span class="Preview_Surface">
+              <span class="Preview_Bar"></span>
+              <span class="Preview_Line"></span>
+            </span>
+            <span class="Tile_Label_Row">
+              <span class="Tile_Name">Bright Warm</span>
+              <span class="Tile_State">ACTIVE</span>
+            </span>
+          </button>
+        </div>
+
+        <div class="Status_Note" id="theme-status"></div>
+      </section>
+
+      <!-- 3. MONTHLY CATEGORY BUDGET CAPS -->
+      <section class="Metric_Card">
+        <div class="Pref_Card_Top_Line">
+          <span class="Card_Label">MONTHLY BUDGET CAPS</span>
+          <span class="Meta_Tag">&#8377; / MONTH</span>
+        </div>
+
+        <div class="Budget_List">
+          <div class="Budget_Row">
+            <span class="Budget_Strip Strip_Food"></span>
+            <div class="Budget_Body">
+              <div class="Budget_Top">
+                <span class="Budget_Name">Food</span>
+              </div>
+              <input type="number" class="Pref_Input" id="budget-input-Food" min="0" step="1" inputmode="numeric" placeholder="0" />
+            </div>
+          </div>
+
+          <div class="Budget_Row">
+            <span class="Budget_Strip Strip_Transit"></span>
+            <div class="Budget_Body">
+              <div class="Budget_Top">
+                <span class="Budget_Name">Transit</span>
+              </div>
+              <input type="number" class="Pref_Input" id="budget-input-Transit" min="0" step="1" inputmode="numeric" placeholder="0" />
+            </div>
+          </div>
+
+          <div class="Budget_Row">
+            <span class="Budget_Strip Strip_Housing"></span>
+            <div class="Budget_Body">
+              <div class="Budget_Top">
+                <span class="Budget_Name">Housing</span>
+              </div>
+              <input type="number" class="Pref_Input" id="budget-input-Housing" min="0" step="1" inputmode="numeric" placeholder="0" />
+            </div>
+          </div>
+
+          <div class="Budget_Row">
+            <span class="Budget_Strip Strip_Shopping"></span>
+            <div class="Budget_Body">
+              <div class="Budget_Top">
+                <span class="Budget_Name">Shopping</span>
+              </div>
+              <input type="number" class="Pref_Input" id="budget-input-Shopping" min="0" step="1" inputmode="numeric" placeholder="0" />
+            </div>
+          </div>
+
+          <div class="Budget_Row">
+            <span class="Budget_Strip Strip_General"></span>
+            <div class="Budget_Body">
+              <div class="Budget_Top">
+                <span class="Budget_Name">General</span>
+              </div>
+              <input type="number" class="Pref_Input" id="budget-input-General" min="0" step="1" inputmode="numeric" placeholder="0" />
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="Pref_Btn Pref_Btn_Primary" id="save-budgets-btn">SAVE BUDGETS</button>
+        <div class="Status_Note" id="budget-status"></div>
+      </section>
+
+      <!-- 4. DANGER ZONE -->
+      <section class="Metric_Card Danger_Card">
+        <div class="Pref_Card_Top_Line">
+          <span class="Card_Label Danger_Label">RESET DATA</span>
+        </div>
+
+        <p class="Danger_Copy">
+          Permanently deletes all logged transactions and budget caps, and resets the theme to default.
+          This cannot be undone.
+        </p>
+
+        <button type="button" class="Pref_Btn Pref_Btn_Danger" id="open-reset-btn">DATA RESET</button>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- DATA RESET CONFIRMATION MODAL -->
+  <div class="Reset_Backdrop" id="reset-backdrop">
+    <div class="Reset_Modal" id="reset-modal" role="dialog" aria-modal="true" aria-labelledby="reset-modal-title">
+      <div class="Reset_Modal_Title" id="reset-modal-title">CONFIRM DATA RESET</div>
+      <p class="Reset_Modal_Copy">
+        All transactions and budgets will be erased and preferences restored to defaults. This action cannot be undone.
+      </p>
+      <div class="Reset_Modal_Actions">
+        <button type="button" class="Pref_Btn" id="reset-cancel-btn">CANCEL</button>
+        <button type="button" class="Pref_Btn Pref_Btn_Danger_Solid" id="reset-confirm-btn">CONFIRM RESET</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="../../shared/js/navbar.js"></script>
+  <script src="../../shared/js/app_settings.js"></script>
+  <script src="./preferences.js"></script>
+</body>
+</html>

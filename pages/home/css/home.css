@@ -75,31 +75,6 @@
   line-height: 1;
 }
 
-.Status_Pill_Row {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding-top: 10px;
-}
-
-.Status_Pill {
-  display: inline-block;
-  padding: 2px 8px;
-  border-radius: 99px;
-  border: 1px solid rgba(55, 178, 77, 0.4);
-  background: rgba(55, 178, 77, 0.1);
-  color: var(--accentdot);
-  font-size: 9px;
-  font-weight: 700;
-  font-family: monospace;
-  letter-spacing: 0.03em;
-}
-
-.Status_Note {
-  font-size: 11px;
-  color: var(--textdim);
-}
-
 /* weekly bar chart styles */
 .Bar_Chart_Frame {
   position: relative;
@@ -153,12 +128,12 @@
   display: block;
   width: 100%;
   min-height: 0;
-  background-color: #2b6cb0;
+  background-color: var(--accentglow);
   border-radius: 0;
 }
 
 .Bar_Highlight {
-  background-color: #3b82f6;
+  background-color: var(--accentglow);
   border-radius: 0;
 }
 
@@ -206,18 +181,16 @@
 
 /* precise video color palette */
 .Seg_Food_Color { stroke: #ef4444; }
-.Seg_Housing_Color { stroke: #46a758; }
-.Seg_Transit_Color { stroke: #3e63dd; }
-.Seg_Supplies_Color { stroke: #e54d2e; }
-.Seg_Shopping_Color { stroke: #10b981; }
-.Seg_Entertainment_Color { stroke: #8b5cf6; }
+.Seg_Housing_Color { stroke: #10b981; }
+.Seg_Transit_Color { stroke: #3b82f6; }
+.Seg_Shopping_Color { stroke: #8b5cf6; }
+.Seg_General_Color { stroke: #64748b; }
 
 .Seg_Food_Bg { background-color: #ef4444; }
-.Seg_Housing_Bg { background-color: #46a758; }
-.Seg_Transit_Bg { background-color: #3e63dd; }
-.Seg_Supplies_Bg { background-color: #e54d2e; }
-.Seg_Shopping_Bg { background-color: #10b981; }
-.Seg_Entertainment_Bg { background-color: #8b5cf6; }
+.Seg_Housing_Bg { background-color: #10b981; }
+.Seg_Transit_Bg { background-color: #3b82f6; }
+.Seg_Shopping_Bg { background-color: #8b5cf6; }
+.Seg_General_Bg { background-color: #64748b; }
 
 .Donut_Inner_Badge {
   position: absolute;
@@ -225,6 +198,23 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.Empty_State_Row {
+  padding: 20px;
+  text-align: center;
+  font-family: monospace;
+  font-size: 11px;
+  color: var(--textdim);
+  border: 1px dashed rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+}
+
+.Empty_State_Text {
+  padding: 24px 0;
+  font-family: monospace;
+  font-size: 11px;
+  color: var(--textdim);
 }
 
 .Badge_Top_Text {
@@ -276,7 +266,7 @@
 /* Recent Activity List */
 .Feed_Action_Link {
   font-size: 10px;
-  color: #4dabf7;
+  color: var(--accentglow);
   font-family: monospace;
   font-weight: 700;
   text-decoration: none;
@@ -373,7 +363,7 @@
 .Fab_Trigger .Fab_Icon {
   width: 14px !important;
   height: 14px !important;
-  stroke: #4dabf7;
+  stroke: var(--accentglow);
   flex-shrink: 0;
 }
 
@@ -592,12 +582,10 @@
 
 /* Preset Category Dots */
 .Dot_Food        { background-color: #ef4444; }
-.Dot_Housing     { background-color: #46a758; }
-.Dot_Transit     { background-color: #3e63dd; }
-.Dot_Supplies    { background-color: #e54d2e; }
-.Dot_Shopping    { background-color: #10b981; }
-.Dot_Entertainment { background-color: #8b5cf6; }
-.Dot_Misc        { background-color: #8e8e93; }
+.Dot_Housing     { background-color: #10b981; }
+.Dot_Transit     { background-color: #3b82f6; }
+.Dot_Shopping    { background-color: #8b5cf6; }
+.Dot_General     { background-color: #64748b; }
 
 /* + Custom Button */
 .Add_Custom_Chip_Btn {
@@ -616,6 +604,10 @@
   margin-top: 4px;
   display: flex;
   gap: 6px;
+}
+
+.Hidden_Input_Wrap {
+  display: none;
 }
 
 .Custom_Cat_Input_Wrap input {
@@ -657,8 +649,8 @@
 }
 
 .Sheet_Commit_Btn {
-  background-color: #f4f4f5;
-  color: #09090b;
+  background-color: var(--textmain);
+  color: var(--mainbg);
   border: none;
   border-radius: 8px;
   padding: 12px;
@@ -672,7 +664,7 @@
 }
 
 .Sheet_Commit_Btn:hover {
-  background-color: #ffffff;
+  background-color: var(--textmain);
 }
 
 .Sheet_Commit_Btn:active {

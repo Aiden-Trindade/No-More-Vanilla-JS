@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Ledger</title>
   <link rel="stylesheet" href="../../shared/css/global.css" />
+  <link rel="stylesheet" href="../../shared/css/themes.css" />
   <link rel="stylesheet" href="./css/home.css" />
 </head>
-<body>
+<body class="page-home">
 
   <div class="App_Shell">
     
@@ -15,7 +16,7 @@
 
     <header class="Top_Header">
       <div>
-        <div class="Greeting_Text">Hello Aiden</div>
+        <div class="Greeting_Text">Hello <span id="brand-name">User</span></div>
         <div class="Date_Text" id="date-box">--</div>
       </div>
 
@@ -29,19 +30,19 @@
           </svg>
         </div>
         <nav class="Capsule_Menu">
-          <a href="home.html" class="Menu_Link Is_Active">
+          <a href="home.html" class="Menu_Link Home_Style Is_Active">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
             Dashboard
           </a>
-          <a href="../history/history.html" class="Menu_Link">
+          <a href="../history/history.html" class="Menu_Link History_Style">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line></svg>
             History
           </a>
-          <a href="#" class="Menu_Link">
+          <a href="#" class="Menu_Link Breakdown_Style">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
             Breakdown
           </a>
-          <a href="#" class="Menu_Link">
+          <a href="../preferences/preferences.html" class="Menu_Link Preferences_Style">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
             Preferences
           </a>
@@ -62,11 +63,6 @@
           <span class="Currency_Symbol">₹</span>
           <span class="Amount_Value" id="total-spent-display">19,150.00</span>
         </div>
-
-        <div class="Status_Pill_Row">
-          <span class="Status_Pill">ON TRACK</span>
-          <span class="Status_Note">Within your planned limit</span>
-        </div>
       </section>
 
       <!-- 2. THIS WEEK BAR GRAPH CARD -->
@@ -76,65 +72,14 @@
           <span class="Meta_Stat" id="week-total-stat">₹4,810 TOTAL</span>
         </div>
 
-        <div class="Bar_Chart_Frame" id="week-bar-chart-frame">
-          <div class="Bar_Chart_Baseline"></div>
-
-          <div class="Bar_Column">
-            <div class="Bar_Track">
-              <div class="Bar_Fill" style="height: 38%;"></div>
-            </div>
-            <span class="Day_Label">M</span>
-          </div>
-
-          <div class="Bar_Column">
-            <div class="Bar_Track">
-              <div class="Bar_Fill" style="height: 18%;"></div>
-            </div>
-            <span class="Day_Label">T</span>
-          </div>
-
-          <div class="Bar_Column">
-            <div class="Bar_Track">
-              <div class="Bar_Fill" style="height: 52%;"></div>
-            </div>
-            <span class="Day_Label">W</span>
-          </div>
-
-          <div class="Bar_Column">
-            <div class="Bar_Track">
-              <div class="Bar_Fill" style="height: 24%;"></div>
-            </div>
-            <span class="Day_Label">T</span>
-          </div>
-
-          <div class="Bar_Column">
-            <div class="Bar_Track">
-              <div class="Bar_Fill" style="height: 85%;"></div>
-            </div>
-            <span class="Day_Label">F</span>
-          </div>
-
-          <div class="Bar_Column">
-            <div class="Bar_Track">
-              <div class="Bar_Fill Bar_Highlight" style="height: 70%;"></div>
-            </div>
-            <span class="Day_Label Active_Day">S</span>
-          </div>
-
-          <div class="Bar_Column">
-            <div class="Bar_Track">
-              <div class="Bar_Fill" style="height: 44%;"></div>
-            </div>
-            <span class="Day_Label">S</span>
-          </div>
-        </div>
+        <div class="Bar_Chart_Frame" id="week-bar-chart-frame"></div>
       </section>
 
       <!-- 3. WHERE IT WENT DONUT CARD -->
       <section class="Metric_Card">
        <div class="Card_Top_Line">
-          <span class="Card_Label" style="padding-left: 15px;">WHERE IT WENT</span>
-          <span class="Meta_Stat" id="donut-meta-stat" style="position: relative; left: -9px; white-space: nowrap;">TOP 4</span>
+          <span class="Card_Label">WHERE IT WENT</span>
+          <span class="Meta_Stat" id="donut-meta-stat">TOP 4</span>
        </div>
 
        <div class="Donut_Section_Layout">
@@ -148,8 +93,8 @@
           <div class="Category_Legend_List" id="category-legend-list">
             <div class="Legend_Row">
               <div class="Legend_Left">
-                <span class="Legend_Dot Seg_Dining_Bg"></span>
-                <span class="Legend_Title">Dining</span>
+                <span class="Legend_Dot Seg_Food_Bg"></span>
+                <span class="Legend_Title">Food</span>
               </div>
               <span class="Legend_Price">₹8,426</span>
             </div>
@@ -172,8 +117,8 @@
 
             <div class="Legend_Row">
               <div class="Legend_Left">
-                <span class="Legend_Dot Seg_Supplies_Bg"></span>
-                <span class="Legend_Title">Supplies</span>
+                <span class="Legend_Dot Seg_Shopping_Bg"></span>
+                <span class="Legend_Title">Shopping</span>
               </div>
               <span class="Legend_Price">₹1,915</span>
             </div>
@@ -191,10 +136,10 @@
         <div class="Tx_Feed_List" id="recent-tx-list">
           <div class="Tx_Row_Item">
             <div class="Tx_Left_Meta">
-              <span class="Tx_Dot Seg_Dining_Bg"></span>
+              <span class="Tx_Dot Seg_Food_Bg"></span>
               <div class="Tx_Identity">
                 <span class="Tx_Name">Swiggy</span>
-                <span class="Tx_Sub_Info">Dining • Oct 5, 9:20 PM</span>
+                <span class="Tx_Sub_Info">Food • Oct 5, 9:20 PM</span>
               </div>
             </div>
             <span class="Tx_Outflow_Val">-₹420.00</span>
@@ -213,10 +158,10 @@
 
           <div class="Tx_Row_Item">
             <div class="Tx_Left_Meta">
-              <span class="Tx_Dot Seg_Supplies_Bg"></span>
+              <span class="Tx_Dot Seg_Shopping_Bg"></span>
               <div class="Tx_Identity">
                 <span class="Tx_Name">Stationery</span>
-                <span class="Tx_Sub_Info">Supplies • Oct 4, 4:40 PM</span>
+                <span class="Tx_Sub_Info">Shopping • Oct 4, 4:40 PM</span>
               </div>
             </div>
             <span class="Tx_Outflow_Val">-₹185.00</span>
@@ -255,6 +200,7 @@
   <!-- ========================================== -->
 
   <script src="../../shared/js/navbar.js"></script>
+  <script src="../../shared/js/app_settings.js"></script>
   <script src="./js/home.js"></script>
 
   <!-- LOG SPEND BOTTOM SHEET -->
@@ -297,7 +243,7 @@
       </div>
 
       <!-- Inline Input when typing a new custom category -->
-      <div class="Custom_Cat_Input_Wrap" id="custom-cat-input-wrap" style="display: none;">
+      <div class="Custom_Cat_Input_Wrap Hidden_Input_Wrap" id="custom-cat-input-wrap">
         <input 
           type="text" 
           id="custom-cat-field" 

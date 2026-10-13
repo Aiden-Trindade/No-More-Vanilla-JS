@@ -1,0 +1,407 @@
+/*
+   preferences.css
+   Shell, header and capsule nav come from shared/css/global.css.
+   Everything here is page-specific, plus the four theme profiles.
+ */
+
+/* 
+   LAYOUT
+*/
+.Pref_Viewport {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 18px 24px 18px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  gap: 20px;
+  width: 100%;
+}
+
+.Metric_Card {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: var(--boxbg);
+  border: 1px solid var(--bordercol);
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.Pref_Card_Top_Line {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.Card_Label {
+  font-size: 11px;
+  color: var(--textdim);
+  font-family: monospace;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding-left: 7px;
+  padding-bottom: 18px;
+}
+
+.Meta_Tag {
+  font-size: 10px;
+  color: var(--textdim);
+  font-family: monospace;
+}
+
+.Field_Label {
+  font-family: monospace;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--textdim);
+  letter-spacing: 0.06em;
+  padding-bottom: 18px;
+}
+
+.Pref_Field_Group {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+/*
+   INPUTS + BUTTONS
+*/
+.Pref_Input {
+  width: 100%;
+  box-sizing: border-box;
+  background-color: var(--mainbg);
+  border: 1px solid var(--bordercol);
+  color: var(--textmain);
+  padding: 10px 12px;
+  font-size: 13px;
+  font-family: monospace;
+  outline: none;
+}
+
+.Pref_Input:focus {
+  border-color: var(--textmain);
+}
+
+.Pref_Input.Is_Invalid {
+  border-color: #ef4444;
+}
+
+.Pref_Input::-webkit-outer-spin-button,
+.Pref_Input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.Pref_Btn {
+  background-color: var(--boxbg);
+  border: 1px solid var(--borderbold);
+  color: var(--textmain);
+  padding: 12px 16px;
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.08s ease;
+}
+
+.Pref_Btn:hover {
+  border-color: var(--textmain);
+}
+
+.Pref_Btn:active {
+  transform: scale(0.98);
+}
+
+.Pref_Btn_Primary {
+  background-color: var(--textmain);
+  border-color: var(--textmain);
+  color: var(--mainbg);
+}
+
+.Pref_Btn_Primary:hover {
+  background-color: var(--textdim);
+  border-color: var(--textdim);
+}
+
+.Pref_Btn_Danger {
+  background-color: rgba(239, 68, 68, 0.1);
+  border-color: rgba(239, 68, 68, 0.5);
+  color: #ef4444;
+}
+
+.Pref_Btn_Danger:hover {
+  background-color: rgba(239, 68, 68, 0.2);
+  border-color: #ef4444;
+}
+
+.Pref_Btn_Danger_Solid {
+  background-color: #ef4444;
+  border-color: #ef4444;
+  color: #ffffff;
+}
+
+.Pref_Btn_Danger_Solid:hover {
+  background-color: #dc2626;
+  border-color: #dc2626;
+}
+
+.Status_Note {
+  min-height: 14px;
+  font-family: monospace;
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--accentglow);
+}
+
+.Status_Note.Is_Error {
+  color: #ef4444;
+}
+
+/* ==========================================================================
+   THEME TILES
+   ========================================================================== */
+.Theme_Grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.Theme_Tile {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  background-color: var(--mainbg);
+  border: 1px solid var(--bordercol);
+  color: var(--textmain);
+  cursor: pointer;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+  transition: border-color 0.15s ease;
+}
+
+.Theme_Tile:hover {
+  border-color: var(--borderbold);
+}
+
+.Theme_Tile.Is_Selected {
+  border-color: var(--accentglow);
+  box-shadow: inset 0 0 0 1px var(--accentglow);
+}
+
+.Preview_Surface {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 10px;
+  border: 1px solid transparent;
+}
+
+.Preview_Bar {
+  display: block;
+  width: 60%;
+  height: 6px;
+}
+
+.Preview_Line {
+  display: block;
+  width: 85%;
+  height: 4px;
+}
+
+.Tile_Label_Row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+}
+
+.Tile_Name {
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.Tile_State {
+  display: none;
+  font-family: monospace;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  color: var(--accentglow);
+}
+
+.Theme_Tile.Is_Selected .Tile_State {
+  display: inline;
+}
+
+/* fixed preview colours: each tile always shows its own profile */
+.Tile_Dark_Cool .Preview_Surface   { background-color: #0b0c10; border-color: #262a35; }
+.Tile_Dark_Cool .Preview_Bar       { background-color: #3b82f6; }
+.Tile_Dark_Cool .Preview_Line      { background-color: #3a4050; }
+
+.Tile_Dark_Warm .Preview_Surface   { background-color: #12100e; border-color: #3b352e; }
+.Tile_Dark_Warm .Preview_Bar       { background-color: #f97316; }
+.Tile_Dark_Warm .Preview_Line      { background-color: #594f44; }
+
+.Tile_Bright_Cool .Preview_Surface { background-color: #f8fafc; border-color: #dbe2ea; }
+.Tile_Bright_Cool .Preview_Bar     { background-color: #2563eb; }
+.Tile_Bright_Cool .Preview_Line    { background-color: #b6c2d0; }
+
+.Tile_Bright_Warm .Preview_Surface { background-color: #faf8f5; border-color: #e6ddd0; }
+.Tile_Bright_Warm .Preview_Bar     { background-color: #ea580c; }
+.Tile_Bright_Warm .Preview_Line    { background-color: #cdbfaa; }
+
+/*
+   BUDGET ROWS
+*/
+.Budget_List {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.Budget_Row {
+  display: flex;
+  align-items: stretch;
+  gap: 12px;
+}
+
+.Budget_Strip {
+  display: block;
+  width: 4px;
+  flex-shrink: 0;
+}
+
+.Strip_Food     { background-color: #ef4444; }
+.Strip_Transit  { background-color: #3b82f6; }
+.Strip_Housing  { background-color: #10b981; }
+.Strip_Shopping { background-color: #8b5cf6; }
+.Strip_General  { background-color: #64748b; }
+
+.Budget_Body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+.Budget_Top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.Budget_Name {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--textmain);
+}
+
+.Budget_Readout {
+  font-family: monospace;
+  font-size: 10px;
+  color: var(--textdim);
+}
+
+/*
+   DANGER ZONE
+*/
+.Danger_Card {
+  border-color: rgba(239, 68, 68, 0.5);
+}
+
+.Danger_Label {
+  color: #ef4444;
+}
+
+.Danger_Copy {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--textdim);
+  padding-left: 7px;
+}
+
+/*
+   RESET MODAL
+*/
+.Reset_Backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  z-index: 100;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.Reset_Backdrop.Is_Open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.Reset_Modal {
+  width: min(92vw, 340px);
+  box-sizing: border-box;
+  background-color: var(--boxbg);
+  border: 1px solid #ef4444;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+}
+
+.Reset_Modal_Title {
+  font-family: monospace;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: #ef4444;
+}
+
+.Reset_Modal_Copy {
+  font-size: 13px;
+  line-height: 1.5;
+  color: var(--textmain);
+}
+
+.Reset_Modal_Actions {
+  display: flex;
+  gap: 10px;
+}
+
+.Reset_Modal_Actions .Pref_Btn {
+  flex: 1;
+}
+
+/*
+   ZERO-RADIUS GEOMETRY (cards, inputs, buttons, strips, tiles, modal)
+*/
+.Metric_Card,
+.Pref_Input,
+.Pref_Btn,
+.Theme_Tile,
+.Preview_Surface,
+.Preview_Bar,
+.Preview_Line,
+.Budget_Strip,
+.Reset_Modal,
+.Reset_Backdrop {
+  border-radius: 0 !important;
+}

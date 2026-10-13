@@ -1,0 +1,59 @@
+body.theme_dark_cool {
+  --mainbg: #0b0c10;
+  --boxbg: #14161c;
+  --hoverbg: #1c1f27;
+  --bordercol: #262a35;
+  --borderbold: #3a4050;
+  --textmain: #ffffff;
+  --textdim: #9aa3b2;
+  --accentdot: #3b82f6;
+  --accentglow: #3b82f6;
+  --pagebg: #000000;
+  background-color: var(--pagebg);
+}
+
+body.theme_dark_warm {
+  --mainbg: #12100e;
+  --boxbg: #1b1815;
+  --hoverbg: #26221e;
+  --bordercol: #3b352e;
+  --borderbold: #594f44;
+  --textmain: #ffffff;
+  --textdim: #b5aba0;
+  --accentdot: #f97316;
+  --accentglow: #f97316;
+  --pagebg: #000000;
+  background-color: var(--pagebg);
+}
+
+body.theme_bright_cool {
+  --mainbg: #f8fafc;
+  --boxbg: #ffffff;
+  --hoverbg: #eef2f7;
+  --bordercol: #dbe2ea;
+  --borderbold: #b6c2d0;
+  --textmain: #0f172a;
+  --textdim: #5b6678;
+  --accentdot: #2563eb;
+  --accentglow: #2563eb;
+  --pagebg: #e2e8f0;
+  background-color: var(--pagebg);
+}
+
+body.theme_bright_warm {
+  --mainbg: #faf8f5;
+  --boxbg: #ffffff;
+  --hoverbg: #f3eee7;
+  --bordercol: #e6ddd0;
+  --borderbold: #cdbfaa;
+  --textmain: #1c1917;
+  --textdim: #78695a;
+  --accentdot: #ea580c;
+  --accentglow: #ea580c;
+  --pagebg: #ece4d8;
+  background-color: var(--pagebg);
+}
+
+.Capsule_Btn:hover {
+  border-color: var(--textmain);
+}
