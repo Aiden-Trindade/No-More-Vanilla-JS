@@ -38,10 +38,6 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line></svg>
             History
           </a>
-          <a href="../breakdown/breakdown.html" class="Menu_Link Breakdown_Style">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-            Breakdown
-          </a>
           <a href="preferences.html" class="Menu_Link Preferences_Style Is_Active">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
             Preferences
@@ -52,23 +48,43 @@
 
     <main class="Pref_Viewport">
 
-      <!-- 1. OPERATOR IDENTITY -->
+      <!-- 1. PROFILE -->
       <section class="Metric_Card">
   
 
         <div class="Pref_Field_Group">
-          <span class="Field_Label">DISPLAY NAME</span>
-          <input type="text" id="name-input" class="Pref_Input" maxlength="20" autocomplete="off" placeholder="User" />
+          <span class="Field_Label">Your Name</span>
+          <input type="text" id="name-input" class="Pref_Input" maxlength="20" autocomplete="off" placeholder="Enter your name..." />
         </div>
 
-        <button type="button" class="Pref_Btn Pref_Btn_Primary" id="save-name-btn">SAVE NAME</button>
+        <button type="button" class="Pref_Btn Pref_Btn_Primary" id="save-name-btn">Save</button>
         <div class="Status_Note" id="name-status"></div>
       </section>
 
-      <!-- 2. THEME PROFILE MATRIX -->
+      <!-- 2. CURRENCY -->
       <section class="Metric_Card">
         <div class="Pref_Card_Top_Line">
-          <span class="Card_Label">THEME PROFILE</span>
+          <span class="Card_Label">Currency</span>
+          <span class="Meta_Tag" id="fx-status-badge">INR</span>
+        </div>
+
+        <div class="Pref_Field_Group">
+          <span class="Field_Label">Display currency</span>
+          <select id="currency-select" class="Pref_Input">
+            <option value="INR">INR</option>
+            <option value="USD">USD</option>
+            <option value="EUR">EUR</option>
+            <option value="GBP">GBP</option>
+          </select>
+        </div>
+
+        <div class="Fx_Status_Badge" id="fx-rate-badge">Exchange rate ready</div>
+      </section>
+
+      <!-- 3. THEME -->
+      <section class="Metric_Card">
+        <div class="Pref_Card_Top_Line">
+          <span class="Card_Label">Theme</span>
         </div>
 
         <div class="Theme_Grid">
@@ -78,8 +94,8 @@
               <span class="Preview_Line"></span>
             </span>
             <span class="Tile_Label_Row">
-              <span class="Tile_Name">Dark Cool</span>
-              <span class="Tile_State">ACTIVE</span>
+              <span class="Tile_Name">Dark cool</span>
+              <span class="Tile_State">Selected</span>
             </span>
           </button>
 
@@ -89,8 +105,8 @@
               <span class="Preview_Line"></span>
             </span>
             <span class="Tile_Label_Row">
-              <span class="Tile_Name">Dark Warm</span>
-              <span class="Tile_State">ACTIVE</span>
+              <span class="Tile_Name">Dark warm</span>
+              <span class="Tile_State">Selected</span>
             </span>
           </button>
 
@@ -100,8 +116,8 @@
               <span class="Preview_Line"></span>
             </span>
             <span class="Tile_Label_Row">
-              <span class="Tile_Name">Bright Cool</span>
-              <span class="Tile_State">ACTIVE</span>
+              <span class="Tile_Name">Bright cool</span>
+              <span class="Tile_State">Selected</span>
             </span>
           </button>
 
@@ -111,8 +127,8 @@
               <span class="Preview_Line"></span>
             </span>
             <span class="Tile_Label_Row">
-              <span class="Tile_Name">Bright Warm</span>
-              <span class="Tile_State">ACTIVE</span>
+              <span class="Tile_Name">Bright warm</span>
+              <span class="Tile_State">Selected</span>
             </span>
           </button>
         </div>
@@ -120,11 +136,11 @@
         <div class="Status_Note" id="theme-status"></div>
       </section>
 
-      <!-- 3. MONTHLY CATEGORY BUDGET CAPS -->
+      <!-- 4. MONTHLY BUDGET -->
       <section class="Metric_Card">
         <div class="Pref_Card_Top_Line">
-          <span class="Card_Label">MONTHLY BUDGET CAPS</span>
-          <span class="Meta_Tag">&#8377; / MONTH</span>
+          <span class="Card_Label">Monthly budget</span>
+          <span class="Meta_Tag">&#8377; / month</span>
         </div>
 
         <div class="Budget_List">
@@ -179,22 +195,22 @@
           </div>
         </div>
 
-        <button type="button" class="Pref_Btn Pref_Btn_Primary" id="save-budgets-btn">SAVE BUDGETS</button>
+        <button type="button" class="Pref_Btn Pref_Btn_Primary" id="save-budgets-btn">Save budget</button>
         <div class="Status_Note" id="budget-status"></div>
       </section>
 
-      <!-- 4. DANGER ZONE -->
+      <!-- 5. DANGER ZONE -->
       <section class="Metric_Card Danger_Card">
         <div class="Pref_Card_Top_Line">
-          <span class="Card_Label Danger_Label">RESET DATA</span>
+          <span class="Card_Label Danger_Label">Reset data</span>
         </div>
 
         <p class="Danger_Copy">
-          Permanently deletes all logged transactions and budget caps, and resets the theme to default.
+          Clear all saved spending and budget limits, then restore the default theme.
           This cannot be undone.
         </p>
 
-        <button type="button" class="Pref_Btn Pref_Btn_Danger" id="open-reset-btn">DATA RESET</button>
+        <button type="button" class="Pref_Btn Pref_Btn_Danger" id="open-reset-btn">Reset data</button>
       </section>
 
     </main>
@@ -203,13 +219,13 @@
   <!-- DATA RESET CONFIRMATION MODAL -->
   <div class="Reset_Backdrop" id="reset-backdrop">
     <div class="Reset_Modal" id="reset-modal" role="dialog" aria-modal="true" aria-labelledby="reset-modal-title">
-      <div class="Reset_Modal_Title" id="reset-modal-title">CONFIRM DATA RESET</div>
+      <div class="Reset_Modal_Title" id="reset-modal-title">Clear all data?</div>
       <p class="Reset_Modal_Copy">
-        All transactions and budgets will be erased and preferences restored to defaults. This action cannot be undone.
+        All spending, budgets, and preferences will be removed and restored to their defaults.
       </p>
       <div class="Reset_Modal_Actions">
-        <button type="button" class="Pref_Btn" id="reset-cancel-btn">CANCEL</button>
-        <button type="button" class="Pref_Btn Pref_Btn_Danger_Solid" id="reset-confirm-btn">CONFIRM RESET</button>
+        <button type="button" class="Pref_Btn" id="reset-cancel-btn">Cancel</button>
+        <button type="button" class="Pref_Btn Pref_Btn_Danger_Solid" id="reset-confirm-btn">Clear all data</button>
       </div>
     </div>
   </div>

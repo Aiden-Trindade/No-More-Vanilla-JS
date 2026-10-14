@@ -185,7 +185,7 @@ function render_all_chips() {
   add_btn.type = "button";
   add_btn.className = "Cat_Chip Add_Custom_Chip_Btn";
   add_btn.id = "add-custom-chip-btn";
-  add_btn.innerHTML = '<span>+</span><span>Create</span>';
+  add_btn.innerHTML = '<span>+</span><span>Add</span>';
   add_btn.addEventListener("click", function() {
     toggle_custom_input();
   });
@@ -360,7 +360,7 @@ function submit_spend() {
   }
 
   if (isNaN(amount) || amount <= 0) {
-    alert("Enter a valid amount");
+    alert("Enter an amount above zero.");
     return;
   }
 
@@ -379,7 +379,7 @@ function submit_spend() {
   recalculate_and_refresh_dashboard();
 
   var removed_tx_id = new_tx.id;
-  show_undo_notification('Added " ' + title + ' "', function() {
+  show_undo_notification('Added "' + title + '"', function() {
     var current_history = get_history();
     var remaining_history = [];
     var index = 0;
@@ -470,10 +470,12 @@ function calculate_total_spent() {
 
   var display = document.getElementById("total-spent-display");
   if (display) {
-    display.innerText = total.toLocaleString("en-IN", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    });
+    display.innerText = Format_Money_Amount(total, Get_Active_Currency_Code());
+  }
+
+  var symbol_markers = document.querySelectorAll(".Currency_Symbol, .Hero_Currency");
+  for (var i = 0; i < symbol_markers.length; i = i + 1) {
+    symbol_markers[i].textContent = Get_Currency_Symbol(Get_Active_Currency_Code());
   }
 }
 
@@ -532,7 +534,7 @@ function render_recent_activity() {
   list_box.innerHTML = "";
 
   if (history.length === 0) {
-    list_box.innerHTML = '<div class="Empty_State_Row">No data added yet.</div>';
+    list_box.innerHTML = '<div class="Empty_State_Row">No spending logged yet.</div>';
     return;
   }
 
@@ -574,7 +576,7 @@ function render_recent_activity() {
           '<span class="Tx_Sub_Info">' + time_sub + '</span>' +
         '</div>' +
       '</div>' +
-      '<span class="Tx_Outflow_Val">-₹' + tx.amount.toFixed(2) + '</span>';
+      '<span class="Tx_Outflow_Val">-' + Get_Currency_Symbol(Get_Active_Currency_Code()) + Format_Money_Amount(tx.amount, Get_Active_Currency_Code()) + '</span>';
 
     list_box.appendChild(row);
   }
@@ -593,14 +595,14 @@ function render_donut_chart() {
   legend.innerHTML = "";
 
   if (history.length === 0) {
-    if (badge) badge.innerText = "0 TX";
+    if (badge) badge.innerText = "0 entries";
     svg.innerHTML = '<circle cx="50" cy="50" r="38" fill="none" stroke="#27272a" class="Donut_Path" stroke-dasharray="2 4" />';
-    legend.innerHTML = '<div class="Empty_State_Text">No data added yet.</div>';
+    legend.innerHTML = '<div class="Empty_State_Text">No spending logged yet.</div>';
     return;
   }
 
   if (badge) {
-    badge.innerText = history.length + " TX";
+    badge.innerText = history.length + " entries";
   }
 
   // 1. Group totals per category
@@ -705,10 +707,7 @@ function render_donut_chart() {
         '<span class="Legend_Dot" style="background-color: ' + slice_color + ';"></span>' +
         '<span class="Legend_Title">' + entry.name + '</span>' +
       '</div>' +
-      '<span class="Legend_Price">₹' + entry.spend.toLocaleString("en-IN", {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0
-      }) + '</span>';
+      '<span class="Legend_Price">' + Get_Currency_Symbol(Get_Active_Currency_Code()) + Format_Money_Amount(entry.spend, Get_Active_Currency_Code()) + '</span>';
 
     legend.appendChild(row);
   }
@@ -771,9 +770,7 @@ function render_week_bar_chart() {
   }
 
   if (total_stat) {
-    total_stat.innerText = "₹" + Number(week_total_spend).toLocaleString("en-IN", {
-      maximumFractionDigits: 0
-    }) + " TOTAL";
+    total_stat.innerText = Get_Currency_Symbol(Get_Active_Currency_Code()) + Format_Money_Amount(week_total_spend, Get_Active_Currency_Code()) + " total";
   }
 
   var max_spend = 0;

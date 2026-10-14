@@ -16,8 +16,8 @@
   box-sizing: border-box;
   background-color: var(--boxbg);
   border: 1px solid var(--bordercol);
-  border-radius: 14px;
-  padding: 16px;
+  border-radius: 8px;
+  padding: 14px 14px 12px;
   display: flex;
   flex-direction: column;
 }
@@ -57,8 +57,8 @@
   display: flex;
   align-items: baseline;
   gap: 4px;
-  margin-top: 18px;
-  margin-bottom: 8px;
+  margin-top: 10px;
+  margin-bottom: 6px;
 }
 
 .Currency_Symbol {
@@ -102,23 +102,23 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   height: 100%;
   justify-content: flex-end;
   z-index: 2;
   flex: 1;
   margin: 0;
   padding: 0;
-  border-radius: 0;
+  border-radius: 6px;
 }
 
 .Bar_Track {
-  width: 14px;
+  width: 13px;
   height: calc(100% - 18px);
   display: flex;
   align-items: flex-end;
   background: transparent;
-  border-radius: 0;
+  border-radius: 6px;
   overflow: hidden;
   margin: 0;
   padding: 0;
@@ -129,12 +129,12 @@
   width: 100%;
   min-height: 0;
   background-color: var(--accentglow);
-  border-radius: 0;
+  border-radius: 6px;
 }
 
 .Bar_Highlight {
   background-color: var(--accentglow);
-  border-radius: 0;
+  border-radius: 6px;
 }
 
 .Day_Label {
@@ -228,7 +228,7 @@
 .Category_Legend_List {
   display: flex;
   flex-direction: column;
-  gap: 9px;
+  gap: 6px;
   flex: 1;
 }
 
@@ -287,7 +287,7 @@
   align-items: center;
   justify-content: space-between;
   padding-bottom: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
 .Tx_Row_Item:last-child {
@@ -349,9 +349,8 @@
   border: 1px solid var(--bordercol);
   color: var(--textmain);
   padding: 10px 18px;
-  border-radius: 99px;
+  border-radius: 8px;
   cursor: pointer;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
   z-index: 10;
   font-family: monospace;
   font-size: 11px;
@@ -371,9 +370,7 @@
 .Sheet_Backdrop {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.72);
   z-index: 100;
   opacity: 0;
   pointer-events: none;
@@ -395,14 +392,13 @@
   background-color: var(--boxbg, #121214);
   border: 1px solid var(--bordercol, rgba(255, 255, 255, 0.08));
   border-bottom: none;
-  border-radius: 20px 20px 0 0;
-  padding: 16px 20px 28px 20px;
+  border-radius: 8px 8px 0 0;
+  padding: 14px 16px 20px;
   z-index: 101;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
   transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 -16px 40px rgba(0, 0, 0, 0.9);
   max-height: 90vh;
   overflow-y: auto;
   box-sizing: border-box;
@@ -528,7 +524,7 @@
   background-color: rgba(255, 255, 255, 0.02);
   border: 1px solid var(--bordercol, rgba(255, 255, 255, 0.08));
   padding: 9px 8px;
-  border-radius: 8px;
+  border-radius: var(--input-radius);
   color: var(--textmain, #f4f4f5);
   font-family: monospace;
   font-size: 11px;
@@ -565,7 +561,7 @@
   justify-content: center;
   width: 16px;
   height: 16px;
-  border-radius: 3px;
+  border-radius: 4px;
   font-size: 13px;
   line-height: 1;
   color: var(--textdim, #71717a);
@@ -622,7 +618,7 @@
   font-size: 11px;
   font-weight: 700;
   padding: 0 12px;
-  border-radius: 8px;
+  border-radius: var(--input-radius);
   cursor: pointer;
 }
 
@@ -679,7 +675,7 @@
   transform: translateX(-50%) translateY(18px);
   background-color: rgba(28, 28, 32, 0.96);
   border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 10px;
+  border-radius: 16px;
   padding: 10px 14px;
   display: flex;
   align-items: center;

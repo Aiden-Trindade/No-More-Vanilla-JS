@@ -22,8 +22,8 @@
   box-sizing: border-box;
   background-color: var(--boxbg);
   border: 1px solid var(--bordercol);
-  border-radius: 14px;
-  padding: 16px;
+  border-radius: 8px;
+  padding: 14px 14px 12px;
   display: flex;
   flex-direction: column;
 }
@@ -48,6 +48,37 @@
   font-size: 10px;
   color: var(--textdim);
   font-family: monospace;
+}
+
+.Contribution_Matrix_Container {
+  margin-top: 10px;
+}
+
+.Contribution_Grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-rows: repeat(7, minmax(0, 1fr));
+  gap: 3px;
+}
+
+.Contribution_Cell {
+  width: 100%;
+  aspect-ratio: 1;
+  background-color: #141922;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: transform 0.12s ease, border-color 0.12s ease;
+}
+
+.Contribution_Cell:hover {
+  border-color: rgba(255, 255, 255, 0.28);
+  transform: translateY(-1px);
+}
+
+.Contribution_Cell.Is_Active {
+  border-color: rgba(255, 255, 255, 0.9);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.9);
 }
 
 /* back link pill (same look as the dashboard capsule button) */
@@ -75,7 +106,7 @@
 .Range_Filter_Container {
   display: flex;
   gap: 8px;
-  margin-top: 14px;
+  margin-top: 10px;
 }
 
 .Filter_Chip {
@@ -84,9 +115,9 @@
   align-items: center;
   justify-content: center;
   background-color: var(--boxbg);
-  border: 1px solid var(--borderbold);
-  border-radius: 99px;
-  padding: 10px 12px;
+  border: 1px solid var(--bordercol);
+  border-radius: 6px;
+  padding: 9px 10px;
   color: var(--textdim);
   font-family: monospace;
   font-size: 11px;
@@ -178,8 +209,8 @@
   box-sizing: border-box;
   background-color: var(--boxbg);
   border: 1px solid var(--bordercol);
-  border-radius: 14px;
-  padding: 16px;
+  border-radius: 8px;
+  padding: 12px 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -279,14 +310,13 @@
   background-color: var(--boxbg);
   border: 1px solid var(--bordercol);
   border-bottom: none;
-  border-radius: 20px 20px 0 0;
-  padding: 16px 20px 28px 20px;
+  border-radius: 8px 8px 0 0;
+  padding: 14px 16px 20px;
   z-index: 101;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
   transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 -16px 40px rgba(0, 0, 0, 0.9);
   max-height: 90vh;
   overflow-y: auto;
   box-sizing: border-box;
@@ -443,9 +473,9 @@
   bottom: 24px;
   transform: translateX(-50%) translateY(18px);
   background-color: rgba(28, 28, 32, 0.96);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 10px;
-  padding: 10px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  padding: 10px 12px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -453,7 +483,6 @@
   opacity: 0;
   pointer-events: none;
   transition: transform 0.22s ease, opacity 0.22s ease;
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
   width: min(380px, calc(100% - 28px));
   box-sizing: border-box;
 }

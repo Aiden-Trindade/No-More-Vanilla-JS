@@ -110,7 +110,7 @@ function Handle_Save_Name() {
   localStorage.setItem(storage_key_username_str, new_name_str);
   name_input_el.value = new_name_str;
   Update_Brand_Tag(new_name_str);
-  Show_Status_Message("name-status", "Name saved", false);
+  Show_Status_Message("name-status", "Saved", false);
 }
 
 /* ==========================================================================
@@ -173,6 +173,104 @@ function Handle_Theme_Tile_Click(theme_arg_str) {
   Write_Json_To_Storage(storage_key_preferences_str, preferences_obj);
 
   Show_Status_Message("theme-status", "Theme saved", false);
+}
+
+/* ==========================================================================
+   2.5 FX ENGINE
+   ========================================================================== */
+function Load_Active_Currency() {
+  var preferences_obj = Read_Json_From_Storage(storage_key_preferences_str, {});
+  var saved_currency_str = "INR";
+
+  if (preferences_obj && typeof preferences_obj === "object") {
+    if (typeof preferences_obj.currency === "string" && ["INR", "USD", "EUR", "GBP"].indexOf(preferences_obj.currency) !== -1) {
+      saved_currency_str = String(preferences_obj.currency);
+    }
+  }
+
+  return saved_currency_str;
+}
+
+function Save_Active_Currency(currency_arg_str) {
+  var next_currency_str = "INR";
+  if (["INR", "USD", "EUR", "GBP"].indexOf(String(currency_arg_str)) !== -1) {
+    next_currency_str = String(currency_arg_str);
+  }
+
+  var preferences_obj = Read_Json_From_Storage(storage_key_preferences_str, {});
+  if (!preferences_obj || typeof preferences_obj !== "object") {
+    preferences_obj = {};
+  }
+
+  preferences_obj.currency = next_currency_str;
+  Write_Json_To_Storage(storage_key_preferences_str, preferences_obj);
+
+  var currency_select_el = document.getElementById("currency-select");
+  if (currency_select_el) {
+    currency_select_el.value = next_currency_str;
+  }
+
+  var fx_status_badge_el = document.getElementById("fx-status-badge");
+  if (fx_status_badge_el) {
+    fx_status_badge_el.textContent = next_currency_str;
+  }
+
+  Update_Fx_Badge();
+}
+
+function Update_Fx_Badge() {
+  var fx_rate_badge_el = document.getElementById("fx-rate-badge");
+  if (!fx_rate_badge_el) {
+    return;
+  }
+
+  var target_currency_str = Get_Active_Currency_Code();
+  var fx_rates_obj = Get_Fx_Rates();
+  var rate_num = Number(fx_rates_obj[target_currency_str]);
+
+  if (target_currency_str === "INR") {
+    fx_rate_badge_el.textContent = "Base currency (INR)";
+    return;
+  }
+
+  if (isNaN(rate_num) || rate_num <= 0) {
+    fx_rate_badge_el.textContent = "Exchange rate unavailable";
+    return;
+  }
+
+  fx_rate_badge_el.textContent = "1 INR = " + Number(rate_num).toFixed(4) + " " + target_currency_str;
+}
+
+function Fetch_Fx_Rates() {
+  var cached_rates_obj = Read_Json_From_Storage("fx_exchange_rates_cache", null);
+  if (cached_rates_obj && cached_rates_obj.rates) {
+    Update_Fx_Badge();
+    return;
+  }
+
+  fetch("https://api.frankfurter.app/latest?from=INR&to=USD,EUR,GBP")
+    .then(function(response_obj) {
+      if (!response_obj.ok) {
+        throw new Error("Request failed");
+      }
+      return response_obj.json();
+    })
+    .then(function(payload_obj) {
+      var normalised_rates = {
+        INR: 1,
+        USD: Number(payload_obj.rates && payload_obj.rates.USD) || 0.0120,
+        EUR: Number(payload_obj.rates && payload_obj.rates.EUR) || 0.0111,
+        GBP: Number(payload_obj.rates && payload_obj.rates.GBP) || 0.0104
+      };
+
+      localStorage.setItem("fx_exchange_rates_cache", JSON.stringify({ rates: normalised_rates, updated_at: new Date().toISOString() }));
+      Update_Fx_Badge();
+    })
+    .catch(function() {
+      var fallback_rates = { INR: 1, USD: 0.0120, EUR: 0.0111, GBP: 0.0104 };
+      localStorage.setItem("fx_exchange_rates_cache", JSON.stringify({ rates: fallback_rates, updated_at: new Date().toISOString() }));
+      Update_Fx_Badge();
+    });
 }
 
 /* ==========================================================================
@@ -333,13 +431,13 @@ function Handle_Save_Budgets() {
   }
 
   if (has_error_bool === true) {
-    Show_Status_Message("budget-status", "// enter valid, non-negative amounts", true);
+    Show_Status_Message("budget-status", "Enter valid amounts", true);
     return;
   }
 
   Write_Json_To_Storage(storage_key_budgets_str, new_budget_obj);
   Render_Budget_Fields();
-  Show_Status_Message("budget-status", "Budgets saved", false);
+  Show_Status_Message("budget-status", "Budget saved", false);
 }
 
 /* ==========================================================================
@@ -360,12 +458,13 @@ function Close_Reset_Modal() {
 }
 
 function Handle_Confirm_Reset() {
-  var default_preferences_obj = { theme: default_theme_str };
+  var default_preferences_obj = { theme: default_theme_str, currency: "INR" };
 
   localStorage.removeItem(storage_key_history_str);
   localStorage.removeItem(storage_key_legacy_history_str);
   localStorage.removeItem(storage_key_budgets_str);
   localStorage.removeItem("ledger_custom_cats_v3");
+  localStorage.removeItem("fx_exchange_rates_cache");
   Write_Json_To_Storage(storage_key_preferences_str, default_preferences_obj);
 
   Close_Reset_Modal();
@@ -382,6 +481,18 @@ function Initialize_Preferences_Page() {
 
   var operator_name_str = Load_Operator_Name();
   Update_Brand_Tag(operator_name_str);
+
+  var active_currency_str = Load_Active_Currency();
+  var currency_select_el = document.getElementById("currency-select");
+  if (currency_select_el) {
+    currency_select_el.value = active_currency_str;
+    currency_select_el.addEventListener("change", function() {
+      Save_Active_Currency(currency_select_el.value);
+    });
+  }
+
+  Update_Fx_Badge();
+  Fetch_Fx_Rates();
 
   var name_input_el = document.getElementById("name-input");
   if (name_input_el) {

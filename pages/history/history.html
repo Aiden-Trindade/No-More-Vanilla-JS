@@ -38,10 +38,6 @@
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line></svg>
             History
           </a>
-          <a href="#" class="Menu_Link Breakdown_Style">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-            Breakdown
-          </a>
           <a href="../preferences/preferences.html" class="Menu_Link Preferences_Style">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
             Preferences
@@ -52,33 +48,44 @@
 
     <main class="History_Viewport">
 
-      <!-- 1. FILTER CARD -->
+      <!-- 1. HEATMAP -->
+      <section class="Metric_Card">
+        <div class="History_Card_Top_Line">
+          <span class="Card_Label">Spending calendar</span>
+          <span class="Meta_Tag">Last 12 weeks</span>
+        </div>
+        <div class="Contribution_Matrix_Container">
+          <div class="Contribution_Grid" id="contribution-heatmap"></div>
+        </div>
+      </section>
+
+      <!-- 2. FILTER CARD -->
       <section class="Metric_Card">
         <div class="History_Card_Top_Line">
 
         </div>
 
         <div class="Range_Filter_Container">
-          <button type="button" class="Filter_Chip" data-range="7">7 DAYS</button>
-          <button type="button" class="Filter_Chip Is_Active" data-range="30">30 DAYS</button>
-          <button type="button" class="Filter_Chip" data-range="all">ALL TIME</button>
+          <button type="button" class="Filter_Chip" data-range="7">7 days</button>
+          <button type="button" class="Filter_Chip Is_Active" data-range="30">30 days</button>
+          <button type="button" class="Filter_Chip" data-range="all">All time</button>
         </div>
       </section>
 
-      <!-- 2. PERIOD SPEND CARD -->
+      <!-- 3. PERIOD SPEND CARD -->
       <section class="Metric_Card">
         <div class="History_Card_Top_Line">
-          <span class="Card_Label">SPENT IN PERIOD</span>
-          <span class="Meta_Tag" id="history-tx-count">0 TX</span>
+          <span class="Card_Label">Spent in this period</span>
+          <span class="Meta_Tag" id="history-tx-count">0 entries</span>
         </div>
 
         <div class="Amount_Display">
-          <span class="Currency_Symbol">&#8377;</span>
+          <span class="Currency_Symbol" id="history-currency-symbol">&#8377;</span>
           <span class="Amount_Value" id="history-total-spend">0.00</span>
         </div>
       </section>
 
-      <!-- 3. TIMELINE (populated by history.js) -->
+      <!-- 4. TIMELINE (populated by history.js) -->
       <div class="Timeline_Container" id="transaction-timeline-container"></div>
 
     </main>
@@ -86,8 +93,8 @@
 
   <!-- UNDO BANNER -->
   <div class="Undo_Notification_Banner" id="undo-notification-banner">
-    <span class="Undo_Notification_Text" id="undo-notification-text">Deleted</span>
-    <button type="button" class="Undo_Notification_Button" id="undo-notification-button">UNDO</button>
+    <span class="Undo_Notification_Text" id="undo-notification-text">Removed</span>
+    <button type="button" class="Undo_Notification_Button" id="undo-notification-button">Undo</button>
   </div>
 
   <!-- TRANSACTION DETAIL BOTTOM SHEET -->
@@ -97,7 +104,7 @@
     <div class="Sheet_Grabber"></div>
 
     <div class="Sheet_Header">
-      <span class="Sheet_Title">TRANSACTION DETAILS</span>
+      <span class="Sheet_Title">Expense details</span>
       <button type="button" class="Sheet_Close_Btn" id="detail-close-btn" aria-label="Close">
         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
           <line x1="18" y1="6" x2="6" y2="18"></line>
@@ -107,37 +114,37 @@
     </div>
 
     <div class="Detail_Hero">
-      <span class="Detail_Hero_Currency">-&#8377;</span>
+      <span class="Detail_Hero_Currency" id="detail-field-amount-symbol">-&#8377;</span>
       <span class="Detail_Hero_Amount" id="detail-field-amount">0.00</span>
     </div>
 
     <div class="Detail_Field_List">
       <div class="Detail_Field_Row">
-        <span class="Field_Label">CATEGORY</span>
+        <span class="Field_Label">Category</span>
         <span class="Field_Value Field_Value_With_Dot">
           <span class="Detail_Cat_Dot" id="detail-field-category-dot"></span>
           <span id="detail-field-category">-</span>
         </span>
       </div>
       <div class="Detail_Field_Row">
-        <span class="Field_Label">NOTE</span>
+        <span class="Field_Label">Note</span>
         <span class="Field_Value" id="detail-field-note">-</span>
       </div>
       <div class="Detail_Field_Row">
-        <span class="Field_Label">DAY</span>
+        <span class="Field_Label">Day</span>
         <span class="Field_Value" id="detail-field-day">-</span>
       </div>
       <div class="Detail_Field_Row">
-        <span class="Field_Label">DATE</span>
+        <span class="Field_Label">Date</span>
         <span class="Field_Value" id="detail-field-date">-</span>
       </div>
       <div class="Detail_Field_Row">
-        <span class="Field_Label">TIME</span>
+        <span class="Field_Label">Time</span>
         <span class="Field_Value" id="detail-field-time">-</span>
       </div>
     </div>
 
-    <button type="button" class="Sheet_Delete_Btn" id="detail-delete-btn">DELETE TRANSACTION</button>
+    <button type="button" class="Sheet_Delete_Btn" id="detail-delete-btn">Delete expense</button>
   </section>
 
   <script src="../../shared/js/navbar.js"></script>

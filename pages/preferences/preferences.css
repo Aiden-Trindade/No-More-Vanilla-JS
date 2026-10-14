@@ -23,10 +23,11 @@
   box-sizing: border-box;
   background-color: var(--boxbg);
   border: 1px solid var(--bordercol);
-  padding: 16px;
+  border-radius: var(--card-radius);
+  padding: 14px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .Pref_Card_Top_Line {
@@ -67,6 +68,20 @@
   gap: 7px;
 }
 
+.Fx_Status_Badge {
+  display: inline-flex;
+  align-items: center;
+  width: fit-content;
+  background-color: var(--mainbg);
+  border: 1px solid var(--bordercol);
+  border-radius: 16px;
+  padding: 8px 10px;
+  font-family: monospace;
+  font-size: 10px;
+  color: var(--textdim);
+  letter-spacing: 0.04em;
+}
+
 /*
    INPUTS + BUTTONS
 */
@@ -75,8 +90,9 @@
   box-sizing: border-box;
   background-color: var(--mainbg);
   border: 1px solid var(--bordercol);
+  border-radius: var(--input-radius);
   color: var(--textmain);
-  padding: 10px 12px;
+  padding: 9px 10px;
   font-size: 13px;
   font-family: monospace;
   outline: none;
@@ -99,6 +115,7 @@
 .Pref_Btn {
   background-color: var(--boxbg);
   border: 1px solid var(--borderbold);
+  border-radius: var(--input-radius);
   color: var(--textmain);
   padding: 12px 16px;
   font-family: monospace;
@@ -175,10 +192,11 @@
 .Theme_Tile {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  padding: 10px;
+  gap: 8px;
+  padding: 8px;
   background-color: var(--mainbg);
   border: 1px solid var(--bordercol);
+  border-radius: 6px;
   color: var(--textmain);
   cursor: pointer;
   text-align: left;
@@ -201,6 +219,7 @@
   gap: 6px;
   padding: 12px 10px;
   border: 1px solid transparent;
+  border-radius: 8px;
 }
 
 .Preview_Bar {
@@ -278,6 +297,7 @@
   display: block;
   width: 4px;
   flex-shrink: 0;
+  border-radius: 8px;
 }
 
 .Strip_Food     { background-color: #ef4444; }
@@ -337,9 +357,7 @@
 .Reset_Backdrop {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.75);
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
+  background-color: rgba(0, 0, 0, 0.72);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -359,12 +377,12 @@
   width: min(92vw, 340px);
   box-sizing: border-box;
   background-color: var(--boxbg);
-  border: 1px solid #ef4444;
-  padding: 20px;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-radius: 8px;
+  padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.7);
+  gap: 12px;
 }
 
 .Reset_Modal_Title {
@@ -390,18 +408,3 @@
   flex: 1;
 }
 
-/*
-   ZERO-RADIUS GEOMETRY (cards, inputs, buttons, strips, tiles, modal)
-*/
-.Metric_Card,
-.Pref_Input,
-.Pref_Btn,
-.Theme_Tile,
-.Preview_Surface,
-.Preview_Bar,
-.Preview_Line,
-.Budget_Strip,
-.Reset_Modal,
-.Reset_Backdrop {
-  border-radius: 0 !important;
-}

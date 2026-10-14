@@ -7,6 +7,7 @@ var ledger_history_storage_key = "ledger_history";
 var ledger_custom_cats_storage_key = "ledger_custom_cats_v3";
 
 var selected_range_days = "30";
+var selected_day_filter = null;
 var active_transaction_for_detail = null;
 
 var undo_notification_timer = null;
@@ -204,10 +205,7 @@ function format_local_time(date_object) {
 }
 
 function format_currency_amount(amount_value) {
-  return Number(amount_value).toLocaleString("en-IN", {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  });
+  return Format_Money_Amount(amount_value, Get_Active_Currency_Code());
 }
 
 /* ==========================================================================
@@ -238,14 +236,12 @@ function build_filtered_transactions() {
 
   for (var i = 0; i < all_transactions.length; i = i + 1) {
     var item = all_transactions[i];
+    var item_time = new Date(item.timestamp).getTime();
+    var matches_range = (range_start_time === null) || (item_time >= range_start_time);
+    var matches_day = (selected_day_filter === null) || (generate_local_date_key(new Date(item.timestamp)) === selected_day_filter);
 
-    if (range_start_time === null) {
+    if (matches_range && matches_day) {
       filtered_transactions.push(item);
-    } else {
-      var item_time = new Date(item.timestamp).getTime();
-      if (item_time >= range_start_time) {
-        filtered_transactions.push(item);
-      }
     }
   }
 
@@ -261,6 +257,104 @@ function build_filtered_transactions() {
   });
 
   return filtered_transactions;
+}
+
+/* ==========================================================================
+   CONTRIBUTION HEATMAP
+   ========================================================================== */
+function get_contribution_matrix_start_date() {
+  var today = new Date();
+  var start_date = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 83);
+  var day_index = start_date.getDay();
+  var offset_to_monday = day_index === 0 ? -6 : 1 - day_index;
+  start_date.setDate(start_date.getDate() + offset_to_monday);
+  start_date.setHours(0, 0, 0, 0);
+  return start_date;
+}
+
+function get_contribution_cell_color(total_spend, max_spend) {
+  if (Number(total_spend) <= 0 || Number(max_spend) <= 0) {
+    return "#141922";
+  }
+
+  var ratio = Number(total_spend) / Number(max_spend);
+  if (ratio <= 0.15) {
+    return "#1f3b30";
+  }
+  if (ratio <= 0.35) {
+    return "#2d5b4c";
+  }
+  if (ratio <= 0.6) {
+    return "#3d7a42";
+  }
+  if (ratio <= 0.85) {
+    return "#4e9a5d";
+  }
+  return "#6ad38f";
+}
+
+function render_contribution_matrix() {
+  var matrix_container = document.getElementById("contribution-heatmap");
+  if (!matrix_container) {
+    return;
+  }
+
+  var history = fetch_transaction_history_from_storage();
+  var matrix_start_date = get_contribution_matrix_start_date();
+  var heatmap_cells = [];
+  var max_day_total = 0;
+
+  for (var week_index = 0; week_index < 12; week_index = week_index + 1) {
+    for (var day_index = 0; day_index < 7; day_index = day_index + 1) {
+      var current_date = new Date(matrix_start_date.getFullYear(), matrix_start_date.getMonth(), matrix_start_date.getDate() + (week_index * 7) + day_index);
+      var date_key = generate_local_date_key(current_date);
+      var day_total = 0;
+
+      for (var r = 0; r < history.length; r = r + 1) {
+        if (generate_local_date_key(new Date(history[r].timestamp)) === date_key) {
+          day_total = day_total + Number(history[r].amount);
+        }
+      }
+
+      if (day_total > max_day_total) {
+        max_day_total = day_total;
+      }
+
+      heatmap_cells.push({
+        date_key: date_key,
+        total: day_total,
+        date_label: format_friendly_local_date(current_date)
+      });
+    }
+  }
+
+  matrix_container.innerHTML = "";
+
+  for (var cell_index = 0; cell_index < heatmap_cells.length; cell_index = cell_index + 1) {
+    var cell_data = heatmap_cells[cell_index];
+    var cell = document.createElement("div");
+    cell.className = "Contribution_Cell";
+    cell.style.backgroundColor = get_contribution_cell_color(cell_data.total, max_day_total);
+    cell.title = cell_data.date_label + ": " + Get_Currency_Symbol(Get_Active_Currency_Code()) + format_currency_amount(cell_data.total);
+
+    if (selected_day_filter === cell_data.date_key) {
+      cell.classList.add("Is_Active");
+    }
+
+    cell.addEventListener("click", function(date_key_value) {
+      return function() {
+        if (selected_day_filter === date_key_value) {
+          selected_day_filter = null;
+        } else {
+          selected_day_filter = date_key_value;
+        }
+        render_contribution_matrix();
+        render_history_view();
+      };
+    }(cell_data.date_key));
+
+    matrix_container.appendChild(cell);
+  }
 }
 
 /* ==========================================================================
@@ -304,7 +398,7 @@ function build_transaction_card(entry) {
 
   var amount_text = document.createElement("span");
   amount_text.className = "Item_Amount_Text";
-  amount_text.textContent = "-\u20B9" + format_currency_amount(entry.amount);
+  amount_text.textContent = "-" + Get_Currency_Symbol(Get_Active_Currency_Code()) + format_currency_amount(entry.amount);
 
   card.appendChild(left_col);
   card.appendChild(amount_text);
@@ -324,6 +418,8 @@ function build_transaction_card(entry) {
 }
 
 function render_history_view() {
+  render_contribution_matrix();
+
   var container = document.getElementById("transaction-timeline-container");
   var total_spend_display = document.getElementById("history-total-spend");
   var count_display = document.getElementById("history-tx-count");
@@ -339,9 +435,13 @@ function render_history_view() {
     total_period_spend = total_period_spend + Number(filtered_transactions[j].amount);
   }
   total_spend_display.textContent = format_currency_amount(total_period_spend);
+  var currency_symbol = document.getElementById("history-currency-symbol");
+  if (currency_symbol) {
+    currency_symbol.textContent = Get_Currency_Symbol(Get_Active_Currency_Code());
+  }
 
   if (count_display) {
-    count_display.textContent = String(filtered_transactions.length) + " TX";
+    count_display.textContent = String(filtered_transactions.length) + " entries";
   }
 
   container.innerHTML = "";
@@ -349,7 +449,7 @@ function render_history_view() {
   if (filtered_transactions.length === 0) {
     var empty_notice = document.createElement("div");
     empty_notice.className = "Empty_State_Notice";
-    empty_notice.textContent = "No data added.";
+    empty_notice.textContent = "No spending in this time period.";
     container.appendChild(empty_notice);
     return;
   }
@@ -391,7 +491,7 @@ function render_history_view() {
 
     var header_subtotal = document.createElement("span");
     header_subtotal.className = "Day_Group_Subtotal";
-    header_subtotal.textContent = "\u20B9" + format_currency_amount(group_total);
+    header_subtotal.textContent = Get_Currency_Symbol(Get_Active_Currency_Code()) + format_currency_amount(group_total);
 
     group_header.appendChild(header_title);
     group_header.appendChild(header_subtotal);
@@ -426,13 +526,17 @@ function open_transaction_detail_sheet(transaction_object) {
   var time_el = document.getElementById("detail-field-time");
 
   amount_el.textContent = format_currency_amount(transaction_object.amount);
+  var detail_currency_symbol = document.getElementById("detail-field-amount-symbol");
+  if (detail_currency_symbol) {
+    detail_currency_symbol.textContent = Get_Currency_Symbol(Get_Active_Currency_Code());
+  }
   category_el.textContent = transaction_object.category;
   category_dot_el.style.backgroundColor = resolve_category_color(transaction_object.category);
 
   if (transaction_object.memo.trim() !== "") {
     note_el.textContent = transaction_object.memo;
   } else {
-    note_el.textContent = "No note attached";
+    note_el.textContent = "No note added";
   }
 
   day_el.textContent = weekday_names[tx_date.getDay()];

@@ -21,6 +21,78 @@ var app_settings_history_key_list = [
 var app_settings_custom_category_storage_key_str = "ledger_custom_cats_v3";
 var app_settings_preferences_key_str = "expense_tracker_preferences";
 var app_settings_username_key_str = "expense_tracker_username";
+var app_settings_default_currency_str = "INR";
+var app_settings_supported_currency_list = ["INR", "USD", "EUR", "GBP"];
+var app_settings_currency_symbol_map = {
+  INR: "₹",
+  USD: "$",
+  EUR: "€",
+  GBP: "£"
+};
+var app_settings_default_fx_rates = {
+  INR: 1,
+  USD: 0.0120,
+  EUR: 0.0111,
+  GBP: 0.0104
+};
+
+function Get_Active_Currency_Code() {
+  var preferences_obj = Read_Json_From_Storage(app_settings_preferences_key_str, {});
+  var active_currency_str = app_settings_default_currency_str;
+
+  if (preferences_obj && typeof preferences_obj === "object") {
+    if (typeof preferences_obj.currency === "string") {
+      if (app_settings_supported_currency_list.indexOf(preferences_obj.currency) !== -1) {
+        active_currency_str = String(preferences_obj.currency);
+      }
+    }
+  }
+
+  return active_currency_str;
+}
+
+function Get_Currency_Symbol(currency_code_arg_str) {
+  var target_currency_str = String(currency_code_arg_str || Get_Active_Currency_Code());
+  if (app_settings_currency_symbol_map[target_currency_str]) {
+    return app_settings_currency_symbol_map[target_currency_str];
+  }
+  return app_settings_currency_symbol_map[app_settings_default_currency_str];
+}
+
+function Get_Fx_Rates() {
+  var cached_rates_obj = Read_Json_From_Storage("fx_exchange_rates_cache", null);
+  if (cached_rates_obj && typeof cached_rates_obj === "object" && cached_rates_obj.rates && typeof cached_rates_obj.rates === "object") {
+    return cached_rates_obj.rates;
+  }
+  return app_settings_default_fx_rates;
+}
+
+function Format_Money_Amount(value_arg, currency_code_arg_str) {
+  var amount_num = Number(value_arg);
+  if (isNaN(amount_num)) {
+    return "0.00";
+  }
+
+  var target_currency_str = String(currency_code_arg_str || Get_Active_Currency_Code());
+  if (target_currency_str === "INR") {
+    return Number(amount_num).toLocaleString("en-IN", {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 2
+    });
+  }
+
+  var fx_rates_obj = Get_Fx_Rates();
+  var rate_num = Number(fx_rates_obj[target_currency_str]);
+  if (isNaN(rate_num) || rate_num <= 0) {
+    rate_num = Number(app_settings_default_fx_rates[target_currency_str]);
+  }
+
+  var converted_amount_num = Number(amount_num) * Number(rate_num);
+  return Number(converted_amount_num).toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
 
 function Read_Json_From_Storage(storage_key_arg_str, fallback_value_arg) {
   var raw_value_str = localStorage.getItem(storage_key_arg_str);
