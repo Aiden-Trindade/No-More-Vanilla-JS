@@ -1,11 +1,12 @@
-const CACHE_NAME = 'pet-app-v1';
+const CACHE_NAME = 'pet-app-v2';
 
 const APP_SHELL = [
   './',
   './index.html',
   './manifest.webmanifest',
-  './history/index.html',
-  './preferences/index.html',
+  './favicon.ico',
+  './pages/history/history.html',
+  './pages/preferences/preferences.html',
   './icons/icon-192.png',
   './icons/icon-512.png'
 ];
@@ -26,7 +27,7 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Network-first: Fetch updates immediately, fall back to offline cache
+// Network-first strategy
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
   if (!event.request.url.startsWith(self.location.origin)) return;
