@@ -18,6 +18,35 @@
   width: 100%;
 }
 
+.Preferences_Footer {
+  margin-top: auto;
+  padding: 0 0 8px;
+  width: 100%;
+}
+
+.User_Counter {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  background-color: var(--surface-overlay);
+  border: 1px solid var(--border-overlay);
+  border-radius: 999px;
+  padding: 10px 14px;
+  box-shadow: var(--overlay-shadow);
+  color: var(--text-overlay-primary);
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.User_Counter #total_users_count {
+  color: var(--text-overlay-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
 .Metric_Card {
   width: 100%;
   box-sizing: border-box;
@@ -360,7 +389,7 @@
 .Reset_Backdrop {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.72);
+  background-color: var(--backdrop-overlay);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -379,13 +408,14 @@
 .Reset_Modal {
   width: min(92vw, 340px);
   box-sizing: border-box;
-  background-color: var(--boxbg);
-  border: 1px solid rgba(239, 68, 68, 0.4);
+  background-color: var(--surface-overlay);
+  border: 1px solid var(--border-overlay);
   border-radius: 8px;
   padding: 16px;
   display: flex;
   flex-direction: column;
   gap: 12px;
+  box-shadow: var(--overlay-shadow);
 }
 
 .Reset_Modal_Title {
@@ -400,7 +430,7 @@
 .Reset_Modal_Copy {
   font-size: 13px;
   line-height: 1.5;
-  color: var(--textmain);
+  color: var(--text-overlay-primary);
 }
 
 .Reset_Modal_Actions {

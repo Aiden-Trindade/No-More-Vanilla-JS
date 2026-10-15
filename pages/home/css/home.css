@@ -445,7 +445,7 @@
 .Sheet_Backdrop {
   position: fixed;
   inset: 0;
-  background-color: rgba(0, 0, 0, 0.72);
+  background-color: var(--backdrop-overlay);
   z-index: 100;
   opacity: 0;
   pointer-events: none;
@@ -464,8 +464,8 @@
   transform: translate(-50%, 100%);
   width: 100%;
   max-width: 440px;
-  background-color: var(--boxbg, #121214);
-  border: 1px solid var(--bordercol, rgba(255, 255, 255, 0.08));
+  background-color: var(--surface-overlay);
+  border: 1px solid var(--border-overlay);
   border-bottom: none;
   border-radius: 8px 8px 0 0;
   padding: 14px 16px 20px;
@@ -750,8 +750,8 @@
   left: 50%;
   bottom: 24px;
   transform: translateX(-50%) translateY(18px);
-  background-color: rgba(28, 28, 32, 0.96);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background-color: var(--surface-overlay);
+  border: 1px solid var(--border-overlay);
   border-radius: 16px;
   padding: 10px 14px;
   display: flex;
@@ -761,7 +761,7 @@
   opacity: 0;
   pointer-events: none;
   transition: transform 0.22s ease, opacity 0.22s ease;
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.45);
+  box-shadow: var(--overlay-shadow);
   width: min(380px, calc(100% - 28px));
   box-sizing: border-box;
 }
@@ -775,7 +775,7 @@
 .Undo_Notification_Text {
   font-family: monospace;
   font-size: 11px;
-  color: var(--textmain, #f4f4f5);
+  color: var(--text-overlay-primary);
   flex: 1;
   white-space: nowrap;
   overflow: hidden;

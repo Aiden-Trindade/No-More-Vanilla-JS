@@ -303,3 +303,20 @@ function Apply_Saved_Name() {
 Apply_Saved_Theme();
 Run_Category_Migration();
 Apply_Saved_Name();
+
+function Register_Service_Worker() {
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", function() {
+      var service_worker_url = new URL("../../sw.js", window.location.href).href;
+      navigator.serviceWorker.register(service_worker_url)
+        .then(function(reg) {
+          console.log("PET Service Worker registered:", reg.scope);
+        })
+        .catch(function(err) {
+          console.warn("PET Service Worker registration failed:", err);
+        });
+    });
+  }
+}
+
+Register_Service_Worker();
