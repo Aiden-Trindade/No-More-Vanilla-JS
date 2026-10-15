@@ -471,6 +471,39 @@ function Handle_Confirm_Reset() {
   window.location.reload();
 }
 
+async function updateVisitorCounter() {
+  var counterElement = document.getElementById("total-users-counter");
+  if (!counterElement) {
+    return;
+  }
+
+  var NAMESPACE = "pet-expense-tracker";
+  var KEY = "unique-visits";
+  var hasVisited = localStorage.getItem("pet_has_visited");
+
+  var endpoint = hasVisited
+    ? "https://api.counterapi.dev/v1/" + NAMESPACE + "/" + KEY
+    : "https://api.counterapi.dev/v1/" + NAMESPACE + "/" + KEY + "/up";
+
+  try {
+    var response = await fetch(endpoint);
+    if (!response.ok) {
+      var initResponse = await fetch("https://api.counterapi.dev/v1/" + NAMESPACE + "/" + KEY + "/up");
+      var initData = await initResponse.json();
+      counterElement.textContent = String(initData.count || initData.count_up_value || "1");
+      localStorage.setItem("pet_has_visited", "true");
+      return;
+    }
+
+    var data = await response.json();
+    counterElement.textContent = String(data.count || data.count_up_value || "1");
+    localStorage.setItem("pet_has_visited", "true");
+  } catch (err) {
+    console.warn("CounterAPI unreachable or blocked by privacy extension:", err);
+    counterElement.textContent = "1+";
+  }
+}
+
 /* ==========================================================================
    INIT
    ========================================================================== */
@@ -603,4 +636,5 @@ Apply_Theme_To_Body(Load_Saved_Theme());
 
 document.addEventListener("DOMContentLoaded", function() {
   Initialize_Preferences_Page();
+  updateVisitorCounter();
 });

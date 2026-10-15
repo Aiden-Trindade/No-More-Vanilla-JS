@@ -304,6 +304,47 @@ Apply_Saved_Theme();
 Run_Category_Migration();
 Apply_Saved_Name();
 
+var deferredPrompt = null;
+var installContainer = document.getElementById("pwa-install-container");
+var installBtn = document.getElementById("pwa-install-btn");
+
+window.addEventListener("beforeinstallprompt", function(e) {
+  e.preventDefault();
+  deferredPrompt = e;
+  if (installContainer) {
+    installContainer.style.display = "flex";
+  }
+});
+
+if (installBtn) {
+  installBtn.addEventListener("click", async function() {
+    if (!deferredPrompt) {
+      return;
+    }
+
+    deferredPrompt.prompt();
+    var outcome = await deferredPrompt.userChoice;
+    console.log("User response: " + outcome.outcome);
+    deferredPrompt = null;
+    if (installContainer) {
+      installContainer.style.display = "none";
+    }
+  });
+}
+
+window.addEventListener("appinstalled", function() {
+  if (installContainer) {
+    installContainer.style.display = "none";
+  }
+  deferredPrompt = null;
+});
+
+if (window.matchMedia("(display-mode: standalone)").matches) {
+  if (installContainer) {
+    installContainer.style.display = "none";
+  }
+}
+
 function Register_Service_Worker() {
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", function() {
