@@ -293,8 +293,89 @@ function get_contribution_cell_color(total_spend, max_spend) {
   return "#6ad38f";
 }
 
+function get_day_entries_for_date(date_key) {
+  var history = fetch_transaction_history_from_storage();
+  var matches = [];
+
+  for (var i = 0; i < history.length; i = i + 1) {
+    if (generate_local_date_key(new Date(history[i].timestamp)) === date_key) {
+      matches.push(history[i]);
+    }
+  }
+
+  matches.sort(function(a, b) {
+    var a_time = new Date(a.timestamp).getTime();
+    var b_time = new Date(b.timestamp).getTime();
+    return a_time - b_time;
+  });
+
+  return matches;
+}
+
+function render_day_inspector(date_key) {
+  var inspector = document.getElementById("day_inspector");
+  var inspector_date = document.getElementById("inspector_date");
+  var inspector_total = document.getElementById("inspector_total");
+  var inspector_items = document.getElementById("inspector_items");
+
+  if (!inspector || !inspector_date || !inspector_total || !inspector_items) {
+    return;
+  }
+
+  if (!date_key) {
+    inspector.style.display = "none";
+    inspector_items.innerHTML = "";
+    return;
+  }
+
+  var entries = get_day_entries_for_date(date_key);
+  var total = 0;
+  for (var i = 0; i < entries.length; i = i + 1) {
+    total = total + Number(entries[i].amount);
+  }
+
+  var selected_date = new Date(date_key + "T00:00:00");
+  inspector_date.textContent = format_friendly_local_date(selected_date);
+  inspector_total.textContent = Get_Currency_Symbol(Get_Active_Currency_Code()) + format_currency_amount(total);
+  inspector_items.innerHTML = "";
+
+  if (entries.length === 0) {
+    inspector.style.display = "none";
+    return;
+  }
+
+  for (var j = 0; j < entries.length; j = j + 1) {
+    var entry = entries[j];
+    var row = document.createElement("div");
+    row.className = "Inspector_Item";
+
+    var left = document.createElement("div");
+    left.className = "Inspector_Item_Left";
+
+    var dot = document.createElement("span");
+    dot.className = "Inspector_Dot";
+    dot.style.backgroundColor = resolve_category_color(entry.category);
+
+    var name = document.createElement("span");
+    name.className = "Inspector_Item_Name";
+    name.textContent = entry.memo.trim() !== "" ? entry.memo : entry.category;
+
+    var amount = document.createElement("span");
+    amount.className = "Inspector_Item_Amount";
+    amount.textContent = "-" + Get_Currency_Symbol(Get_Active_Currency_Code()) + format_currency_amount(entry.amount);
+
+    left.appendChild(dot);
+    left.appendChild(name);
+    row.appendChild(left);
+    row.appendChild(amount);
+    inspector_items.appendChild(row);
+  }
+
+  inspector.style.display = "flex";
+}
+
 function render_contribution_matrix() {
-  var matrix_container = document.getElementById("contribution-heatmap");
+  var matrix_container = document.getElementById("heatmap_grid");
   if (!matrix_container) {
     return;
   }
@@ -345,8 +426,10 @@ function render_contribution_matrix() {
       return function() {
         if (selected_day_filter === date_key_value) {
           selected_day_filter = null;
+          render_day_inspector(null);
         } else {
           selected_day_filter = date_key_value;
+          render_day_inspector(date_key_value);
         }
         render_contribution_matrix();
         render_history_view();
@@ -354,6 +437,12 @@ function render_contribution_matrix() {
     }(cell_data.date_key));
 
     matrix_container.appendChild(cell);
+  }
+
+  if (selected_day_filter) {
+    render_day_inspector(selected_day_filter);
+  } else {
+    render_day_inspector(null);
   }
 }
 

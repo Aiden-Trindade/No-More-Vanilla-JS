@@ -54,8 +54,28 @@
           <span class="Card_Label">Spending calendar</span>
           <span class="Meta_Tag">Last 12 weeks</span>
         </div>
-        <div class="Contribution_Matrix_Container">
-          <div class="Contribution_Grid" id="contribution-heatmap"></div>
+        <div class="Heatmap_Wrapper">
+          <div class="Heatmap_Days_Col" aria-hidden="true">
+            <span class="Day_Label">Mon</span>
+            <span class="Day_Label Empty_Label"></span>
+            <span class="Day_Label">Wed</span>
+            <span class="Day_Label Empty_Label"></span>
+            <span class="Day_Label">Fri</span>
+            <span class="Day_Label Empty_Label"></span>
+            <span class="Day_Label">Sun</span>
+          </div>
+
+          <div class="Heatmap_Scroll_Container">
+            <div id="heatmap_grid" class="Heatmap_Grid"></div>
+          </div>
+        </div>
+
+        <div id="day_inspector" class="Day_Inspector" style="display: none;">
+          <div class="Inspector_Header">
+            <span id="inspector_date" class="Inspector_Date"></span>
+            <span id="inspector_total" class="Inspector_Total"></span>
+          </div>
+          <div id="inspector_items" class="Inspector_Items_List"></div>
         </div>
       </section>
 

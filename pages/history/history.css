@@ -36,12 +36,13 @@
 }
 
 .Card_Label {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--textdim);
   font-family: monospace;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.05em;
   padding-left: 7px;
+  white-space: nowrap;
 }
 
 .Meta_Tag {
@@ -50,15 +51,135 @@
   font-family: monospace;
 }
 
-.Contribution_Matrix_Container {
+.Heatmap_Wrapper {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
   margin-top: 10px;
+  width: 100%;
 }
 
-.Contribution_Grid {
+.Heatmap_Days_Col {
+  display: grid;
+  grid-template-rows: repeat(7, 1fr);
+  width: 24px;
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.Day_Label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 9px;
+  line-height: 1;
+  color: var(--textdim);
+  font-family: monospace;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  opacity: 0.9;
+}
+
+.Day_Label.Empty_Label {
+  visibility: hidden;
+}
+
+.Heatmap_Scroll_Container {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+
+.Heatmap_Grid {
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   grid-template-rows: repeat(7, minmax(0, 1fr));
   gap: 3px;
+  min-width: 220px;
+  width: 100%;
+}
+
+.Day_Inspector {
+  border: 1px solid var(--bordercol);
+  border-radius: 8px;
+  background-color: var(--mainbg);
+  margin-top: 12px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.Inspector_Header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.Inspector_Date {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--textmain);
+  font-family: monospace;
+}
+
+.Inspector_Total {
+  font-size: 11px;
+  color: var(--textdim);
+  font-family: monospace;
+  font-variant-numeric: tabular-nums;
+}
+
+.Inspector_Items_List {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.Inspector_Item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 6px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.Inspector_Item:first-child {
+  border-top: none;
+}
+
+.Inspector_Item_Left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.Inspector_Dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.Inspector_Item_Name {
+  font-size: 11px;
+  color: var(--textmain);
+  font-family: monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.Inspector_Item_Amount {
+  font-size: 11px;
+  color: var(--textdim);
+  font-family: monospace;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .Contribution_Cell {
@@ -343,10 +464,11 @@
 
 .Sheet_Title {
   font-family: monospace;
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 600;
   letter-spacing: 0.08em;
   color: var(--textdim);
+  white-space: nowrap;
 }
 
 .Sheet_Close_Btn {
@@ -415,11 +537,12 @@
 
 .Field_Label {
   font-family: monospace;
-  font-size: 10px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 600;
   color: var(--textdim);
   letter-spacing: 0.06em;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .Field_Value {

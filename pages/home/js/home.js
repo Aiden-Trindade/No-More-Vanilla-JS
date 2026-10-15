@@ -595,14 +595,14 @@ function render_donut_chart() {
   legend.innerHTML = "";
 
   if (history.length === 0) {
-    if (badge) badge.innerText = "0 entries";
+    if (badge) badge.innerText = "0 TX";
     svg.innerHTML = '<circle cx="50" cy="50" r="38" fill="none" stroke="#27272a" class="Donut_Path" stroke-dasharray="2 4" />';
     legend.innerHTML = '<div class="Empty_State_Text">No spending logged yet.</div>';
     return;
   }
 
   if (badge) {
-    badge.innerText = history.length + " entries";
+    badge.innerText = history.length + " TX ";
   }
 
   // 1. Group totals per category
@@ -770,7 +770,7 @@ function render_week_bar_chart() {
   }
 
   if (total_stat) {
-    total_stat.innerText = Get_Currency_Symbol(Get_Active_Currency_Code()) + Format_Money_Amount(week_total_spend, Get_Active_Currency_Code()) + " total";
+    total_stat.innerText = "Total: " + Get_Currency_Symbol(Get_Active_Currency_Code()) + Format_Money_Amount(week_total_spend, Get_Active_Currency_Code());
   }
 
   var max_spend = 0;

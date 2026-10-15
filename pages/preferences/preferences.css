@@ -38,13 +38,14 @@
 }
 
 .Card_Label {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--textdim);
   font-family: monospace;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.05em;
   padding-left: 7px;
   padding-bottom: 18px;
+  white-space: nowrap;
 }
 
 .Meta_Tag {
@@ -55,11 +56,12 @@
 
 .Field_Label {
   font-family: monospace;
-  font-size: 10px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 600;
   color: var(--textdim);
   letter-spacing: 0.06em;
   padding-bottom: 18px;
+  white-space: nowrap;
 }
 
 .Pref_Field_Group {
@@ -243,9 +245,10 @@
 
 .Tile_Name {
   font-family: monospace;
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 12px;
+  font-weight: 600;
   letter-spacing: 0.04em;
+  white-space: nowrap;
 }
 
 .Tile_State {
@@ -387,10 +390,11 @@
 
 .Reset_Modal_Title {
   font-family: monospace;
-  font-size: 12px;
-  font-weight: 800;
+  font-size: 14px;
+  font-weight: 700;
   letter-spacing: 0.08em;
   color: #ef4444;
+  white-space: nowrap;
 }
 
 .Reset_Modal_Copy {

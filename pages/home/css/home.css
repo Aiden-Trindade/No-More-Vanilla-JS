@@ -22,34 +22,60 @@
   flex-direction: column;
 }
 
-.Card_Top_Line_Line{
+.Card_Top_Line,
+.Card_Top_Line_Line,
+.line {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 10px;
+  gap: 12px;
+  width: 100%;
+}
+
+.Card_Top_Line > *,
+.Card_Top_Line_Line > *,
+.line > * {
+  min-width: 0;
 }
 
 .Card_Label {
-  font-size: 11px;
+  font-size: 13px;
   color: var(--textdim);
   font-family: monospace;
-  font-weight: 700;
+  font-weight: 600;
   letter-spacing: 0.05em;
   padding-left: 7px;
+  white-space: nowrap;
+}
+
+.Meta_Stat,
+.Meta_Stats,
+.Period_Tag,
+.Feed_Action_Link {
+  margin-left: auto;
+  white-space: nowrap;
+  text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 55%;
 }
 
 .Meta_Stat {
   font-size: 10px;
   color: var(--textdim);
   font-family: monospace;
-  padding-left: 185px;
 }
 
-.Period_Tag{
+.Meta_Stats {
   font-size: 10px;
   color: var(--textdim);
   font-family: monospace;
-  padding-left: 153px;
+}
+
+.Period_Tag {
+  font-size: 10px;
+  color: var(--textdim);
+  font-family: monospace;
 }
 
 /* spent this month styles */
@@ -149,20 +175,43 @@
 }
 
 /* where it went donut section */
+.Donut_Top_Line {
+  align-items: center;
+}
+
 .Donut_Section_Layout {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  margin-top: 6px;
+  width: 100%;
   padding-top: 14px;
+}
+
+.Donut_Legend_Column {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+  margin-left: 36px;
+}
+
+.Donut_Legend_Header {
+  font-size: 10px;
+  color: var(--textdim);
+  font-family: monospace;
+  font-weight: 700;
+  text-align: right;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  margin: 0 0 8px auto;
 }
 
 .Donut_Graphic_Wrap {
   position: relative;
-  width: 108px;
-  height: 108px;
+  width: 130px;
+  height: 130px;
   flex-shrink: 0;
+  display: flex;
+  justify-content: flex-start;
 }
 
 .Donut_Svg_El {
@@ -228,20 +277,25 @@
 .Category_Legend_List {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 10px;
   flex: 1;
+  min-width: 0;
+  width: 100%;
 }
 
 .Legend_Row {
-  display: flex;
+  display: grid;
+  grid-template-columns: minmax(80px, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
+  width: 100%;
+  column-gap: 16px;
 }
 
 .Legend_Left {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 8px;
+  min-width: 0;
 }
 
 .Legend_Dot {
@@ -249,18 +303,32 @@
   height: 6px;
   border-radius: 50%;
   flex-shrink: 0;
+  margin: 0;
+  padding: 0;
 }
 
 .Legend_Title {
   font-size: 12px;
+  font-weight: 500;
   color: var(--textmain);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  margin: 0;
+  padding: 0;
 }
 
 .Legend_Price {
-  font-size: 11px;
+  font-size: 12px;
+  font-weight: 600;
   color: var(--textdim);
   font-family: monospace;
-  padding-right: 12px;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  justify-self: end;
+  text-align: right;
+  margin: 0;
+  padding: 0;
 }
 
 /* Recent Activity List */
@@ -271,7 +339,14 @@
   font-weight: 700;
   text-decoration: none;
   letter-spacing: 0.05em;
-  padding-left: 163px;
+  transition: color 0.2s ease, text-shadow 0.2s ease, opacity 0.2s ease;
+}
+
+.Feed_Action_Link:hover,
+.Feed_Action_Link:focus-visible {
+  color: var(--accentglow);
+  text-shadow: 0 0 10px var(--accentglow);
+  opacity: 1;
 }
 
 .Tx_Feed_List {
@@ -425,10 +500,11 @@
 
 .Sheet_Title {
   font-family: monospace;
-  font-size: 11px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 600;
   letter-spacing: 0.08em;
   color: var(--textdim, #71717a);
+  white-space: nowrap;
 }
 
 .Sheet_Close_Btn {
@@ -503,10 +579,11 @@
 
 .Field_Label {
   font-family: monospace;
-  font-size: 10px;
-  font-weight: 700;
+  font-size: 13px;
+  font-weight: 600;
   color: var(--textdim, #71717a);
   letter-spacing: 0.06em;
+  white-space: nowrap;
 }
 
 /* Category Grid & Chips */
