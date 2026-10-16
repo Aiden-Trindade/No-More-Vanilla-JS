@@ -802,3 +802,74 @@
   border-color: rgba(125, 211, 252, 0.6);
   color: #e0f2fe;
 }
+/* ==========================================================================
+   INSTALL BANNER
+   ========================================================================== */
+.Install_Banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  background-color: var(--boxbg);
+  border: 1px solid var(--bordercol);
+  border-radius: var(--card-radius);
+  padding: 10px 12px;
+}
+
+.Install_Banner[hidden] {
+  display: none;
+}
+
+.Install_Banner_Text {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.Install_Banner_Title {
+  font-family: monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--textmain);
+}
+
+.Install_Banner_Sub {
+  font-family: monospace;
+  font-size: 10px;
+  color: var(--textdim);
+}
+
+.Install_Banner_Btn {
+  flex-shrink: 0;
+  background-color: var(--textmain);
+  border: 1px solid var(--textmain);
+  border-radius: var(--input-radius);
+  color: var(--mainbg);
+  font-family: monospace;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 8px 12px;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.Install_Banner_Close {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: none;
+  color: var(--textdim);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.Install_Banner_Close:hover {
+  color: var(--textmain);
+}

@@ -471,37 +471,26 @@ function Handle_Confirm_Reset() {
   window.location.reload();
 }
 
-async function updateVisitorCounter() {
-  var counterElement = document.getElementById("total-users-counter");
-  if (!counterElement) {
+function Update_Visitor_Counter() {
+  var counter_el = document.getElementById("total-users-counter");
+  if (!counter_el) {
     return;
   }
 
-  var NAMESPACE = "pet-expense-tracker";
-  var KEY = "unique-visits";
-  var hasVisited = localStorage.getItem("pet_has_visited");
-
-  var endpoint = hasVisited
-    ? "https://api.counterapi.dev/v1/" + NAMESPACE + "/" + KEY
-    : "https://api.counterapi.dev/v1/" + NAMESPACE + "/" + KEY + "/up";
-
-  try {
-    var response = await fetch(endpoint);
-    if (!response.ok) {
-      var initResponse = await fetch("https://api.counterapi.dev/v1/" + NAMESPACE + "/" + KEY + "/up");
-      var initData = await initResponse.json();
-      counterElement.textContent = String(initData.count || initData.count_up_value || "1");
-      localStorage.setItem("pet_has_visited", "true");
-      return;
-    }
-
-    var data = await response.json();
-    counterElement.textContent = String(data.count || data.count_up_value || "1");
-    localStorage.setItem("pet_has_visited", "true");
-  } catch (err) {
-    console.warn("CounterAPI unreachable or blocked by privacy extension:", err);
-    counterElement.textContent = "1+";
+  // paint the last known number instantly, then refresh it
+  var cached_count = Get_Cached_Visitor_Count();
+  if (cached_count !== null) {
+    counter_el.textContent = Format_Visitor_Count(cached_count);
   }
+
+  Sync_Visitor_Count().then(function(live_count) {
+    if (live_count !== null) {
+      counter_el.textContent = Format_Visitor_Count(live_count);
+    } else if (cached_count === null) {
+      // blocked or offline and nothing cached: at least this visitor exists
+      counter_el.textContent = "1+";
+    }
+  });
 }
 
 /* ==========================================================================
@@ -636,5 +625,5 @@ Apply_Theme_To_Body(Load_Saved_Theme());
 
 document.addEventListener("DOMContentLoaded", function() {
   Initialize_Preferences_Page();
-  updateVisitorCounter();
+  Update_Visitor_Counter();
 });

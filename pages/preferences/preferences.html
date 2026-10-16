@@ -7,16 +7,29 @@
   <link rel="stylesheet" href="../../shared/css/global.css" />
   <link rel="stylesheet" href="../../shared/css/themes.css" />
   <link rel="stylesheet" href="./preferences.css" />
-  <link rel="icon" type="image/x-icon" href="../../favicon.ico">
+  <link rel="icon" type="image/x-icon" href="../../icons/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="../../icons/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="../../icons/favicon-16x16.png">
   <link rel="apple-touch-icon" href="../../icons/apple-touch-icon.png">
   <link rel="manifest" href="../../manifest.webmanifest">
   <meta name="theme-color" content="#0b0c10">
   <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="PET">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 <body class="page-preferences">
+
+  <!-- icon sprite for the install guide -->
+  <svg class="Install_Sprite" aria-hidden="true" focusable="false">
+    <symbol id="ic-share" viewBox="0 0 24 24"><path d="M12 15V3"/><path d="M8 7l4-4 4 4"/><path d="M7 10H6a2 2 0 0 0-2 2v7a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7a2 2 0 0 0-2-2h-1"/></symbol>
+    <symbol id="ic-add-square" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8"/><path d="M8 12h8"/></symbol>
+    <symbol id="ic-dots-vertical" viewBox="0 0 24 24"><circle cx="12" cy="5" r="1.7" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="12" cy="19" r="1.7" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="ic-dots-horizontal" viewBox="0 0 24 24"><circle cx="5" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="12" cy="12" r="1.7" fill="currentColor" stroke="none"/><circle cx="19" cy="12" r="1.7" fill="currentColor" stroke="none"/></symbol>
+    <symbol id="ic-menu" viewBox="0 0 24 24"><path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/></symbol>
+    <symbol id="ic-install" viewBox="0 0 24 24"><path d="M12 4v10"/><path d="M8 10l4 4 4-4"/><path d="M5 19h14"/></symbol>
+    <symbol id="ic-external" viewBox="0 0 24 24"><path d="M14 4h6v6"/><path d="M20 4l-9 9"/><path d="M18 14v4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4"/></symbol>
+  </svg>
 
   <div class="App_Shell">
 
@@ -55,6 +68,71 @@
     </header>
 
     <main class="Pref_Viewport">
+
+      <!-- 0. INSTALL APP (hidden automatically once the app is installed) -->
+      <section class="Metric_Card Install_Card" id="install-card" hidden>
+        <div class="Pref_Card_Top_Line">
+          <span class="Card_Label">Install the app</span>
+          <span class="Install_Platform_Tag" id="install-platform-tag"></span>
+        </div>
+
+        <p class="Install_Copy">
+          Add PET to your home screen to open it in one tap, even offline.
+          Your expenses stay safely on this device.
+        </p>
+
+        <!-- shown when the browser offers a real install prompt -->
+        <button type="button" class="Pref_Btn Pref_Btn_Primary" id="pwa-install-btn" hidden>Install app</button>
+
+        <!-- shown when it does not: pick the steps for this device -->
+        <div class="Install_Guide" id="install-guide">
+
+          <ol class="Install_Steps" data-platform="ios_safari" hidden>
+          <li class="Install_Step"><span class="Install_Step_Num">1</span><span class="Install_Step_Text">Tap the <strong>Share</strong> button <span class="Install_Icon_Chip"><svg class="Install_Icon" viewBox="0 0 24 24"><use href="#ic-share"/></svg></span> at the bottom of Safari (top of the screen on iPad).</span></li>
+          <li class="Install_Step"><span class="Install_Step_Num">2</span><span class="Install_Step_Text">Scroll down and tap <strong>Add to Home Screen</strong> <span class="Install_Icon_Chip"><svg class="Install_Icon" viewBox="0 0 24 24"><use href="#ic-add-square"/></svg></span>.</span></li>
+          <li class="Install_Step"><span class="Install_Step_Num">3</span><span class="Install_Step_Text">Tap <strong>Add</strong>. PET now opens from your home screen like any app.</span></li>
+          </ol>
+
+          <ol class="Install_Steps" data-platform="ios_other" hidden>
+          <li class="Install_Step"><span class="Install_Step_Num">1</span><span class="Install_Step_Text">Tap the <strong>Share</strong> button <span class="Install_Icon_Chip"><svg class="Install_Icon" viewBox="0 0 24 24"><use href="#ic-share"/></svg></span> in the address bar.</span></li>
+          <li class="Install_Step"><span class="Install_Step_Num">2</span><span class="Install_Step_Text">Tap <strong>Add to Home Screen</strong> <span class="Install_Icon_Chip"><svg class="Install_Icon" viewBox="0 0 24 24"><use href="#ic-add-square"/></svg></span>, then <strong>Add</strong>.</span></li>
+          <li class="Install_Step"><span class="Install_Step_Num">3</span><span class="Install_Step_Text">Don't see it? Copy the link below and open it in <strong>Safari</strong>, then repeat from step 1.</span></li>
+          </ol>
+
+          <ol class="Install_Steps" data-platform="android_chrome" hidden>
+          <li class="Install_Step"><span class="Install_Step_Num">1</span><span class="Install_Step_Text">Tap the <strong>three dots</strong> <span class="Install_Icon_Chip"><svg class="Install_Icon" viewBox="0 0 24 24"><use href="#ic-dots-vertical"/></svg></span> in the top corner of your browser.</span></li>
+          <li class="Install_Step"><span class="Install_Step_Num">2</span><span class="Install_Step_Text">Tap <strong>Install app</strong> <span class="Install_Icon_Chip"><svg class="Install_Icon" viewBox="0 0 24 24"><use href="#ic-install"/></svg></span> or <strong>Add to Home screen</strong> <span class="Install_Icon_Chip"><svg class="Install_Icon" viewBox="0 0 24 24"><use href="#ic-add-square"/></svg></span>.</span></li>
+          <li class="Install_Step"><span class="Install_Step_Num">3</span><span class="Install_Step_Text">Tap <strong>Install</strong> to confirm. PET appears with your other apps.</span></li>
+          </ol>
+
+          <ol class="Install_Steps" data-platform="android_samsung" hidden>
+          <li class="Install_Step"><span class="Install_Step_Num">1</span><span class="Install_Step_Text">Tap the <strong>menu</strong> <span class="Install_Icon_Chip"><svg class="Install_Icon" viewBox="0 0 24 24"><use href="#ic-menu"/></svg></span> at the bottom right of Samsung Internet.</span></li>
+          <li class="Install_Step"><span class="Install_Step_Num">2</span><span class="Install_Step_Text">Tap <strong>Add page to</strong>, then choose <strong>Home screen</strong> <span class="Install_Icon_Chip"><svg class="Install_Icon" viewBox="0 0 24 24"><use href="#ic-add-square"/></svg></span>.</span></li>
+          <li class="Install_Step"><span class="Install_Step_Num">3</span><span class="Install_Step_Text">Tap <strong>Add</strong> to confirm.</span></li>
+          </ol>
+
+          <ol class="Install_Steps" data-platform="inapp" hidden>
+          <li class="Install_Step"><span class="Install_Step_Num">1</span><span class="Install_Step_Text">You're inside another app's browser, which can't install apps. Tap its menu <span class="Install_Icon_Chip"><svg class="Install_Icon" viewBox="0 0 24 24"><use href="#ic-dots-horizontal"/></svg></span> or <span class="Install_Icon_Chip"><svg class="Install_Icon" viewBox="0 0 24 24"><use href="#ic-dots-vertical"/></svg></span> or Share <span class="Install_Icon_Chip"><svg class="Install_Icon" viewBox="0 0 24 24"><use href="#ic-share"/></svg></span>.</span></li>
+          <li class="Install_Step"><span class="Install_Step_Num">2</span><span class="Install_Step_Text">Choose <strong>Open in Chrome</strong> (Android) or <strong>Open in Safari</strong> (iPhone) <span class="Install_Icon_Chip"><svg class="Install_Icon" viewBox="0 0 24 24"><use href="#ic-external"/></svg></span>.</span></li>
+          <li class="Install_Step"><span class="Install_Step_Num">3</span><span class="Install_Step_Text">Once it opens, come back to <strong>Preferences</strong> and follow the install steps shown there.</span></li>
+          </ol>
+
+          <ol class="Install_Steps" data-platform="desktop" hidden>
+          <li class="Install_Step"><span class="Install_Step_Num">1</span><span class="Install_Step_Text">In Chrome or Edge, click the <strong>install icon</strong> <span class="Install_Icon_Chip"><svg class="Install_Icon" viewBox="0 0 24 24"><use href="#ic-install"/></svg></span> at the right end of the address bar.</span></li>
+          <li class="Install_Step"><span class="Install_Step_Num">2</span><span class="Install_Step_Text">No icon? Open the browser menu <span class="Install_Icon_Chip"><svg class="Install_Icon" viewBox="0 0 24 24"><use href="#ic-dots-vertical"/></svg></span> and choose <strong>Install PET</strong> or <strong>Cast, save and share &rarr; Install page as app</strong>.</span></li>
+          </ol>
+
+          <ol class="Install_Steps" data-platform="generic" hidden>
+          <li class="Install_Step"><span class="Install_Step_Num">1</span><span class="Install_Step_Text">Open your browser's menu <span class="Install_Icon_Chip"><svg class="Install_Icon" viewBox="0 0 24 24"><use href="#ic-dots-vertical"/></svg></span> or Share button <span class="Install_Icon_Chip"><svg class="Install_Icon" viewBox="0 0 24 24"><use href="#ic-share"/></svg></span>.</span></li>
+          <li class="Install_Step"><span class="Install_Step_Num">2</span><span class="Install_Step_Text">Look for <strong>Install app</strong> or <strong>Add to Home screen</strong> <span class="Install_Icon_Chip"><svg class="Install_Icon" viewBox="0 0 24 24"><use href="#ic-add-square"/></svg></span>.</span></li>
+          </ol>
+
+          <div class="Install_Copy_Row" id="install-copy-row" hidden>
+            <button type="button" class="Pref_Btn" id="install-copy-link-btn">Copy app link</button>
+            <span class="Status_Note" id="install-copy-status"></span>
+          </div>
+        </div>
+      </section>
 
       <!-- 1. PROFILE -->
       <section class="Metric_Card">
@@ -217,16 +295,6 @@
 
         <button type="button" class="Pref_Btn Pref_Btn_Danger" id="open-reset-btn">Reset data</button>
       </section>
-
-      <div class="setting-item" id="pwa-install-container" style="display: none;">
-        <div class="setting-info">
-          <div class="setting-title">Get Mobile / Desktop App</div>
-          <div class="setting-subtitle">Install PET to your device for instant offline access</div>
-        </div>
-        <button id="pwa-install-btn" class="action-btn" type="button">
-          Install
-        </button>
-      </div>
 
       <footer class="Preferences_Footer">
         <div class="User_Counter">

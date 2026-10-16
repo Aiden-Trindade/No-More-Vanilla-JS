@@ -304,47 +304,297 @@ Apply_Saved_Theme();
 Run_Category_Migration();
 Apply_Saved_Name();
 
-var deferredPrompt = null;
-var installContainer = document.getElementById("pwa-install-container");
-var installBtn = document.getElementById("pwa-install-btn");
+/* ==========================================================================
+   PWA INSTALL
+   Native prompt when the browser fires beforeinstallprompt, otherwise
+   platform-detected manual steps. Hidden for good once the app is installed.
+   ========================================================================== */
+var app_settings_install_prompt_event = null;
+var app_settings_installed_flag_key_str = "pet_app_installed";
+var app_settings_banner_dismissed_key_str = "pet_install_banner_dismissed";
 
-window.addEventListener("beforeinstallprompt", function(e) {
-  e.preventDefault();
-  deferredPrompt = e;
-  if (installContainer) {
-    installContainer.style.display = "flex";
+var app_settings_install_platform_label_map = {
+  ios_safari: "iPhone / iPad \u00B7 Safari",
+  ios_other: "iPhone / iPad",
+  android_chrome: "Android",
+  android_samsung: "Samsung Internet",
+  inapp: "In-app browser",
+  desktop: "Desktop",
+  generic: "Your browser"
+};
+
+// storage can throw in some private / locked-down modes; the install UI must never break the app
+function Safe_Local_Get(storage_key_arg_str) {
+  try {
+    return localStorage.getItem(storage_key_arg_str);
+  } catch (error_obj) {
+    return null;
   }
-});
+}
 
-if (installBtn) {
-  installBtn.addEventListener("click", async function() {
-    if (!deferredPrompt) {
+function Safe_Local_Set(storage_key_arg_str, value_arg_str) {
+  try {
+    localStorage.setItem(storage_key_arg_str, String(value_arg_str));
+  } catch (error_obj) {
+    // ignore: nothing here is user data
+  }
+}
+
+function Safe_Local_Remove(storage_key_arg_str) {
+  try {
+    localStorage.removeItem(storage_key_arg_str);
+  } catch (error_obj) {
+    // ignore
+  }
+}
+
+function Is_Running_Standalone() {
+  if (window.navigator.standalone === true) {
+    return true;
+  }
+
+  if (window.matchMedia) {
+    var mode_list = ["standalone", "fullscreen", "minimal-ui"];
+    for (var i = 0; i < mode_list.length; i = i + 1) {
+      if (window.matchMedia("(display-mode: " + mode_list[i] + ")").matches) {
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+function Detect_Install_Platform() {
+  var user_agent_str = String(navigator.userAgent || "");
+  var is_ios_bool = /iPad|iPhone|iPod/.test(user_agent_str);
+
+  // iPadOS reports itself as a Mac
+  if (!is_ios_bool && navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1) {
+    is_ios_bool = true;
+  }
+
+  var is_android_bool = /Android/i.test(user_agent_str);
+
+  // social / messenger webviews: they cannot install web apps
+  var in_app_pattern = /FBAN|FBAV|FB_IAB|Instagram|Line\/|MicroMessenger|Snapchat|Twitter|TikTok|musical_ly|Bytedance|LinkedInApp|Pinterest|WhatsApp|GSA\/|; wv\)/i;
+  if (in_app_pattern.test(user_agent_str)) {
+    return "inapp";
+  }
+
+  if (is_ios_bool) {
+    // iOS webviews have no "Safari/" token in the user agent
+    if (!/Safari\//.test(user_agent_str)) {
+      return "inapp";
+    }
+    if (/CriOS|FxiOS|EdgiOS|OPiOS|OPT\//.test(user_agent_str)) {
+      return "ios_other";
+    }
+    return "ios_safari";
+  }
+
+  if (is_android_bool) {
+    if (/SamsungBrowser/i.test(user_agent_str)) {
+      return "android_samsung";
+    }
+    return "android_chrome";
+  }
+
+  if (/Windows|Macintosh|Linux|CrOS/.test(user_agent_str)) {
+    return "desktop";
+  }
+
+  return "generic";
+}
+
+function Render_Install_Ui() {
+  var card_el = document.getElementById("install-card");
+  var banner_el = document.getElementById("pwa-install-banner");
+  if (!card_el && !banner_el) {
+    return;
+  }
+
+  var is_installed_bool = Is_Running_Standalone() || Safe_Local_Get(app_settings_installed_flag_key_str) === "1";
+
+  if (card_el) {
+    card_el.hidden = is_installed_bool;
+  }
+  if (banner_el) {
+    banner_el.hidden = is_installed_bool || Safe_Local_Get(app_settings_banner_dismissed_key_str) === "1";
+  }
+
+  if (is_installed_bool || !card_el) {
+    return;
+  }
+
+  var has_native_prompt_bool = app_settings_install_prompt_event !== null;
+  var platform_str = Detect_Install_Platform();
+
+  var install_btn_el = document.getElementById("pwa-install-btn");
+  var guide_el = document.getElementById("install-guide");
+  var copy_row_el = document.getElementById("install-copy-row");
+  var platform_tag_el = document.getElementById("install-platform-tag");
+
+  // a real prompt wins; manual steps are the fallback
+  if (install_btn_el) {
+    install_btn_el.hidden = !has_native_prompt_bool;
+  }
+  if (guide_el) {
+    guide_el.hidden = has_native_prompt_bool;
+  }
+
+  var step_list_el = card_el.querySelectorAll(".Install_Steps");
+  for (var i = 0; i < step_list_el.length; i = i + 1) {
+    step_list_el[i].hidden = (step_list_el[i].getAttribute("data-platform") !== platform_str);
+  }
+
+  if (copy_row_el) {
+    copy_row_el.hidden = !(platform_str === "inapp" || platform_str === "ios_other");
+  }
+
+  if (platform_tag_el) {
+    platform_tag_el.textContent = app_settings_install_platform_label_map[platform_str] || "";
+  }
+}
+
+function Handle_Install_Click(button_arg_el) {
+  // no native prompt: send the user to the step-by-step guide
+  if (app_settings_install_prompt_event === null) {
+    var card_el = document.getElementById("install-card");
+    if (card_el) {
+      card_el.scrollIntoView({ behavior: "smooth", block: "start" });
       return;
     }
 
-    deferredPrompt.prompt();
-    var outcome = await deferredPrompt.userChoice;
-    console.log("User response: " + outcome.outcome);
-    deferredPrompt = null;
-    if (installContainer) {
-      installContainer.style.display = "none";
+    var fallback_href_str = button_arg_el.getAttribute("data-fallback-href");
+    if (fallback_href_str) {
+      window.location.href = fallback_href_str;
     }
-  });
+    return;
+  }
+
+  var prompt_event = app_settings_install_prompt_event;
+  app_settings_install_prompt_event = null; // a prompt can only be used once
+  prompt_event.prompt();
+
+  prompt_event.userChoice
+    .then(function(choice_obj) {
+      if (choice_obj && choice_obj.outcome === "accepted") {
+        Safe_Local_Set(app_settings_installed_flag_key_str, "1");
+      }
+      Render_Install_Ui();
+    })
+    .catch(function() {
+      Render_Install_Ui();
+    });
 }
 
-window.addEventListener("appinstalled", function() {
-  if (installContainer) {
-    installContainer.style.display = "none";
+function Copy_App_Link() {
+  var status_el = document.getElementById("install-copy-status");
+  var app_url_str = new URL("../../", window.location.href).href;
+
+  function show_result(message_str) {
+    if (status_el) {
+      status_el.textContent = message_str;
+      setTimeout(function() {
+        status_el.textContent = "";
+      }, 2500);
+    }
   }
-  deferredPrompt = null;
+
+  function legacy_copy() {
+    var helper_el = document.createElement("textarea");
+    helper_el.value = app_url_str;
+    helper_el.setAttribute("readonly", "");
+    helper_el.className = "Install_Sprite";
+    document.body.appendChild(helper_el);
+    helper_el.select();
+
+    var copied_bool = false;
+    try {
+      copied_bool = document.execCommand("copy");
+    } catch (error_obj) {
+      copied_bool = false;
+    }
+
+    document.body.removeChild(helper_el);
+    if (copied_bool) {
+      show_result("Link copied");
+    } else {
+      show_result("Press and hold to copy: " + app_url_str);
+    }
+  }
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(app_url_str)
+      .then(function() {
+        show_result("Link copied");
+      })
+      .catch(legacy_copy);
+  } else {
+    legacy_copy();
+  }
+}
+
+function Init_Install_Ui() {
+  var card_install_btn_el = document.getElementById("pwa-install-btn");
+  if (card_install_btn_el) {
+    card_install_btn_el.addEventListener("click", function() {
+      Handle_Install_Click(card_install_btn_el);
+    });
+  }
+
+  var banner_install_btn_el = document.getElementById("pwa-banner-install-btn");
+  if (banner_install_btn_el) {
+    banner_install_btn_el.addEventListener("click", function() {
+      Handle_Install_Click(banner_install_btn_el);
+    });
+  }
+
+  var banner_dismiss_btn_el = document.getElementById("pwa-banner-dismiss-btn");
+  if (banner_dismiss_btn_el) {
+    banner_dismiss_btn_el.addEventListener("click", function() {
+      Safe_Local_Set(app_settings_banner_dismissed_key_str, "1");
+      Render_Install_Ui();
+    });
+  }
+
+  var copy_link_btn_el = document.getElementById("install-copy-link-btn");
+  if (copy_link_btn_el) {
+    copy_link_btn_el.addEventListener("click", Copy_App_Link);
+  }
+
+  // react if the app gets installed / opened as an app while this page is open
+  if (window.matchMedia) {
+    var standalone_query = window.matchMedia("(display-mode: standalone)");
+    if (standalone_query.addEventListener) {
+      standalone_query.addEventListener("change", Render_Install_Ui);
+    }
+  }
+
+  Render_Install_Ui();
+}
+
+// registered immediately: the event can arrive before DOMContentLoaded
+window.addEventListener("beforeinstallprompt", function(event_obj) {
+  event_obj.preventDefault();
+  app_settings_install_prompt_event = event_obj;
+  // the browser only fires this when the app is NOT installed, so clear any stale "installed" hint
+  Safe_Local_Remove(app_settings_installed_flag_key_str);
+  Render_Install_Ui();
 });
 
-if (window.matchMedia("(display-mode: standalone)").matches) {
-  if (installContainer) {
-    installContainer.style.display = "none";
-  }
-}
+window.addEventListener("appinstalled", function() {
+  app_settings_install_prompt_event = null;
+  Safe_Local_Set(app_settings_installed_flag_key_str, "1");
+  Render_Install_Ui();
+});
 
+document.addEventListener("DOMContentLoaded", Init_Install_Ui);
+
+/* ==========================================================================
+   SERVICE WORKER
+   ========================================================================== */
 function Register_Service_Worker() {
   if ("serviceWorker" in navigator) {
     window.addEventListener("load", function() {
@@ -361,3 +611,171 @@ function Register_Service_Worker() {
 }
 
 Register_Service_Worker();
+
+/* ==========================================================================
+   VISITOR COUNTER
+   One keyless provider, written so it never throws and never logs errors.
+   To switch provider later, only app_settings_counter_config_obj changes.
+   ========================================================================== */
+var app_settings_counter_config_obj = {
+  base_url_str: "https://countapi.mileshilliard.com/api/v1",
+  counter_key_str: "pet_expense_tracker_unique_visits",
+  timeout_ms_num: 5000
+};
+var app_settings_visited_key_str = "pet_has_visited";
+var app_settings_count_cache_key_str = "pet_visitor_count_cache";
+var app_settings_visit_promise_obj = null;
+
+function Parse_Count_Value(raw_value_arg) {
+  if (typeof raw_value_arg !== "number" && typeof raw_value_arg !== "string") {
+    return null;
+  }
+  if (String(raw_value_arg).trim() === "") {
+    return null;
+  }
+
+  var parsed_num = Number(raw_value_arg);
+  if (!isFinite(parsed_num) || parsed_num < 0) {
+    return null;
+  }
+
+  return Math.floor(parsed_num);
+}
+
+// tolerant of the payload shape: 12, "12", {value:12}, {count:12}, {data:{value:12}} ...
+function Extract_Count_From_Payload(payload_arg, depth_arg_num) {
+  var direct_count = Parse_Count_Value(payload_arg);
+  if (direct_count !== null) {
+    return direct_count;
+  }
+
+  if (!payload_arg || typeof payload_arg !== "object" || (depth_arg_num || 0) > 1) {
+    return null;
+  }
+
+  var key_list = ["value", "count", "total", "hits", "data", "result"];
+  for (var i = 0; i < key_list.length; i = i + 1) {
+    if (Object.prototype.hasOwnProperty.call(payload_arg, key_list[i])) {
+      var found_count = Extract_Count_From_Payload(payload_arg[key_list[i]], (depth_arg_num || 0) + 1);
+      if (found_count !== null) {
+        return found_count;
+      }
+    }
+  }
+
+  return null;
+}
+
+// always resolves (number or null); a blocked / failed / slow request is just null
+function Fetch_Counter_Value(action_arg_str) {
+  return new Promise(function(resolve_fn) {
+    var is_done_bool = false;
+    var abort_controller_obj = null;
+
+    if (typeof AbortController === "function") {
+      abort_controller_obj = new AbortController();
+    }
+
+    function finish(value_arg) {
+      if (is_done_bool) {
+        return;
+      }
+      is_done_bool = true;
+      clearTimeout(timer_id);
+      resolve_fn(value_arg);
+    }
+
+    var timer_id = setTimeout(function() {
+      if (abort_controller_obj) {
+        abort_controller_obj.abort();
+      }
+      finish(null);
+    }, app_settings_counter_config_obj.timeout_ms_num);
+
+    var request_url_str = app_settings_counter_config_obj.base_url_str + "/" + action_arg_str + "/" +
+      encodeURIComponent(app_settings_counter_config_obj.counter_key_str);
+
+    var request_options_obj = {
+      method: "GET",
+      cache: "no-store",
+      credentials: "omit",
+      referrerPolicy: "no-referrer"
+    };
+    if (abort_controller_obj) {
+      request_options_obj.signal = abort_controller_obj.signal;
+    }
+
+    try {
+      fetch(request_url_str, request_options_obj)
+        .then(function(response_obj) {
+          if (!response_obj.ok) {
+            return null;
+          }
+          return response_obj.text();
+        })
+        .then(function(text_str) {
+          if (text_str === null || text_str === undefined) {
+            finish(null);
+            return;
+          }
+
+          var payload_value;
+          try {
+            payload_value = JSON.parse(text_str);
+          } catch (parse_error) {
+            payload_value = String(text_str).trim();
+          }
+          finish(Extract_Count_From_Payload(payload_value, 0));
+        })
+        .catch(function() {
+          finish(null);
+        });
+    } catch (sync_error) {
+      finish(null);
+    }
+  });
+}
+
+function Get_Cached_Visitor_Count() {
+  return Parse_Count_Value(Safe_Local_Get(app_settings_count_cache_key_str));
+}
+
+function Format_Visitor_Count(count_arg_num) {
+  return Number(count_arg_num).toLocaleString("en-US");
+}
+
+// New device: +1 once. Known device: read only. Resolves to a number or null, never rejects.
+function Sync_Visitor_Count() {
+  if (app_settings_visit_promise_obj !== null) {
+    return app_settings_visit_promise_obj;
+  }
+
+  var action_str = "get";
+  var is_new_device_bool = Safe_Local_Get(app_settings_visited_key_str) === null;
+
+  if (is_new_device_bool) {
+    action_str = "hit";
+    // mark first so two quick page loads cannot both count this device
+    Safe_Local_Set(app_settings_visited_key_str, "true");
+  }
+
+  app_settings_visit_promise_obj = Fetch_Counter_Value(action_str).then(function(count_num) {
+    if (count_num === null) {
+      // blocked or offline: let a new device try to be counted again next time
+      if (is_new_device_bool) {
+        Safe_Local_Remove(app_settings_visited_key_str);
+      }
+      return null;
+    }
+
+    Safe_Local_Set(app_settings_count_cache_key_str, count_num);
+    return count_num;
+  });
+
+  return app_settings_visit_promise_obj;
+}
+
+// count a brand-new device on whichever page it opens first (not only Preferences)
+if (Safe_Local_Get(app_settings_visited_key_str) === null) {
+  Sync_Visitor_Count();
+}

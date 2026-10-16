@@ -211,61 +211,122 @@
   color: #ef4444;
 }
 
-.setting-item {
+/* ==========================================================================
+   INSTALL CARD
+   ========================================================================== */
+.Install_Sprite {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+}
+
+.Install_Card {
+  scroll-margin-top: 16px;
+}
+
+.Install_Card[hidden],
+.Install_Guide[hidden],
+.Install_Steps[hidden],
+.Install_Copy_Row[hidden],
+#pwa-install-btn[hidden] {
+  display: none;
+}
+
+.Install_Platform_Tag {
+  font-family: monospace;
+  font-size: 10px;
+  color: var(--textdim);
+  white-space: nowrap;
+}
+
+.Install_Copy {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--textdim);
+}
+
+.Install_Guide {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex-direction: column;
   gap: 12px;
+}
+
+.Install_Steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.Install_Step {
+  display: grid;
+  grid-template-columns: 22px minmax(0, 1fr);
+  align-items: start;
+  column-gap: 12px;
+  padding: 10px 12px;
   background-color: var(--mainbg);
   border: 1px solid var(--bordercol);
   border-radius: var(--input-radius);
-  padding: 12px 14px;
-  margin-top: 4px;
 }
 
-.setting-info {
+.Install_Step_Num {
+  width: 22px;
+  height: 22px;
   display: flex;
-  flex-direction: column;
-  gap: 4px;
-  min-width: 0;
-}
-
-.setting-title {
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--borderbold);
+  border-radius: 50%;
   font-family: monospace;
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
   color: var(--textmain);
 }
 
-.setting-subtitle {
-  font-family: monospace;
-  font-size: 10px;
+.Install_Step_Text {
+  font-size: 12px;
+  line-height: 24px;
   color: var(--textdim);
-  line-height: 1.45;
 }
 
-.action-btn {
-  flex-shrink: 0;
+.Install_Step_Text strong {
+  color: var(--textmain);
+  font-weight: 700;
+}
+
+.Install_Icon_Chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin: 0 2px;
+  vertical-align: middle;
   background-color: var(--boxbg);
   border: 1px solid var(--borderbold);
   border-radius: 6px;
   color: var(--textmain);
-  font-family: monospace;
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  padding: 8px 10px;
-  cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
-  transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.08s ease;
 }
 
-.action-btn:hover {
-  border-color: var(--textmain);
+.Install_Icon {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-.action-btn:active {
-  transform: scale(0.98);
+.Install_Copy_Row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
 }
 
 /* ==========================================================================
@@ -498,4 +559,3 @@
 .Reset_Modal_Actions .Pref_Btn {
   flex: 1;
 }
-
