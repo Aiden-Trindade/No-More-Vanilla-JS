@@ -95,6 +95,7 @@
   display: grid;
   grid-template-columns: repeat(12, minmax(0, 1fr));
   grid-template-rows: repeat(7, minmax(0, 1fr));
+  grid-auto-flow: column;
   gap: 3px;
   min-width: 220px;
   width: 100%;
@@ -182,24 +183,65 @@
   white-space: nowrap;
 }
 
+/* ---- heatmap levels: variables per theme, no hard-coded cell colours ---- */
+.Heatmap_Grid {
+  --heat-0: #141922;
+  --heat-1: #0e4429;
+  --heat-2: #006d32;
+  --heat-3: #26a641;
+  --heat-4: #39d353;
+  --heat-border: rgba(255, 255, 255, 0.05);
+}
+
+body.theme_dark_cool .Heatmap_Grid {
+  --heat-0: #141922;
+}
+
+body.theme_dark_warm .Heatmap_Grid {
+  --heat-0: #1f1b17;
+}
+
+body.theme_bright_cool .Heatmap_Grid {
+  --heat-0: #e6ebf2;
+  --heat-1: #9be9a8;
+  --heat-2: #40c463;
+  --heat-3: #30a14e;
+  --heat-4: #216e39;
+  --heat-border: rgba(15, 23, 42, 0.08);
+}
+
+body.theme_bright_warm .Heatmap_Grid {
+  --heat-0: #efe9df;
+  --heat-1: #9be9a8;
+  --heat-2: #40c463;
+  --heat-3: #30a14e;
+  --heat-4: #216e39;
+  --heat-border: rgba(28, 25, 23, 0.08);
+}
+
 .Contribution_Cell {
   width: 100%;
   aspect-ratio: 1;
-  background-color: #141922;
-  border: 1px solid rgba(255, 255, 255, 0.05);
+  background-color: var(--heat-0);
+  border: 1px solid var(--heat-border);
   border-radius: 2px;
   cursor: pointer;
   transition: transform 0.12s ease, border-color 0.12s ease;
 }
 
+.Contribution_Cell[data-level="1"] { background-color: var(--heat-1); }
+.Contribution_Cell[data-level="2"] { background-color: var(--heat-2); }
+.Contribution_Cell[data-level="3"] { background-color: var(--heat-3); }
+.Contribution_Cell[data-level="4"] { background-color: var(--heat-4); }
+
 .Contribution_Cell:hover {
-  border-color: rgba(255, 255, 255, 0.28);
+  border-color: var(--textdim);
   transform: translateY(-1px);
 }
 
 .Contribution_Cell.Is_Active {
-  border-color: rgba(255, 255, 255, 0.9);
-  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.9);
+  border-color: var(--textmain);
+  box-shadow: inset 0 0 0 1px var(--textmain);
 }
 
 /* back link pill (same look as the dashboard capsule button) */

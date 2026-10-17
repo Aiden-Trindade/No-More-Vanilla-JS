@@ -263,34 +263,53 @@ function build_filtered_transactions() {
    CONTRIBUTION HEATMAP
    ========================================================================== */
 function get_contribution_matrix_start_date() {
+  // 12 columns of Monday..Sunday. The last column is the current week, so today is always in the grid.
   var today = new Date();
-  var start_date = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 83);
-  var day_index = start_date.getDay();
-  var offset_to_monday = day_index === 0 ? -6 : 1 - day_index;
-  start_date.setDate(start_date.getDate() + offset_to_monday);
-  start_date.setHours(0, 0, 0, 0);
-  return start_date;
+  var days_since_monday = 6;
+
+  if (today.getDay() !== 0) {
+    days_since_monday = today.getDay() - 1;
+  }
+
+  return new Date(today.getFullYear(), today.getMonth(), today.getDate() - days_since_monday - (11 * 7));
 }
 
-function get_contribution_cell_color(total_spend, max_spend) {
-  if (Number(total_spend) <= 0 || Number(max_spend) <= 0) {
-    return "#141922";
+function get_contribution_cell_level(total_spend, max_spend) {
+  var total_number = Number(total_spend);
+  var max_number = Number(max_spend);
+
+  if (!(total_number > 0) || !(max_number > 0)) {
+    return 0;
   }
 
-  var ratio = Number(total_spend) / Number(max_spend);
-  if (ratio <= 0.15) {
-    return "#1f3b30";
+  var ratio = total_number / max_number;
+  if (ratio <= 0.25) {
+    return 1;
   }
-  if (ratio <= 0.35) {
-    return "#2d5b4c";
+  if (ratio <= 0.5) {
+    return 2;
   }
-  if (ratio <= 0.6) {
-    return "#3d7a42";
+  if (ratio <= 0.75) {
+    return 3;
   }
-  if (ratio <= 0.85) {
-    return "#4e9a5d";
+  return 4;
+}
+
+// one pass over the history: { "YYYY-MM-DD": total } using LOCAL dates (no UTC shift)
+function build_daily_totals_map(history_list) {
+  var daily_totals = {};
+
+  for (var i = 0; i < history_list.length; i = i + 1) {
+    var amount_number = Number(history_list[i].amount);
+    if (isNaN(amount_number)) {
+      continue;
+    }
+
+    var date_key = generate_local_date_key(new Date(history_list[i].timestamp));
+    daily_totals[date_key] = (daily_totals[date_key] || 0) + amount_number;
   }
-  return "#6ad38f";
+
+  return daily_totals;
 }
 
 function get_day_entries_for_date(date_key) {
@@ -381,6 +400,7 @@ function render_contribution_matrix() {
   }
 
   var history = fetch_transaction_history_from_storage();
+  var daily_totals = build_daily_totals_map(history);
   var matrix_start_date = get_contribution_matrix_start_date();
   var heatmap_cells = [];
   var max_day_total = 0;
@@ -389,13 +409,7 @@ function render_contribution_matrix() {
     for (var day_index = 0; day_index < 7; day_index = day_index + 1) {
       var current_date = new Date(matrix_start_date.getFullYear(), matrix_start_date.getMonth(), matrix_start_date.getDate() + (week_index * 7) + day_index);
       var date_key = generate_local_date_key(current_date);
-      var day_total = 0;
-
-      for (var r = 0; r < history.length; r = r + 1) {
-        if (generate_local_date_key(new Date(history[r].timestamp)) === date_key) {
-          day_total = day_total + Number(history[r].amount);
-        }
-      }
+      var day_total = daily_totals[date_key] || 0;
 
       if (day_total > max_day_total) {
         max_day_total = day_total;
@@ -415,7 +429,8 @@ function render_contribution_matrix() {
     var cell_data = heatmap_cells[cell_index];
     var cell = document.createElement("div");
     cell.className = "Contribution_Cell";
-    cell.style.backgroundColor = get_contribution_cell_color(cell_data.total, max_day_total);
+    cell.setAttribute("data-level", String(get_contribution_cell_level(cell_data.total, max_day_total)));
+    cell.setAttribute("data-date", cell_data.date_key);
     cell.title = cell_data.date_label + ": " + Get_Currency_Symbol(Get_Active_Currency_Code()) + format_currency_amount(cell_data.total);
 
     if (selected_day_filter === cell_data.date_key) {
