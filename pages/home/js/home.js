@@ -369,7 +369,7 @@ function submit_spend() {
     amount: amount,
     category: selected_category,
     memo: title,
-    timestamp: new Date().toISOString()
+    timestamp: Build_Local_Timestamp(new Date())
   };
 
   var history = get_history();
@@ -753,7 +753,8 @@ function render_week_bar_chart() {
 
   for (var j = 0; j < history.length; j = j + 1) {
     var tx = history[j];
-    var tx_date = String(tx.timestamp).split("T")[0];
+    // local day, not the UTC date baked into older toISOString() timestamps
+    var tx_date = Get_Local_Date_Key(Parse_Stored_Timestamp(tx.timestamp));
     var tx_amount = Number(tx.amount);
 
     if (isNaN(tx_amount)) {

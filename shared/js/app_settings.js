@@ -128,6 +128,49 @@ function Apply_Saved_Theme() {
   return theme_name_str;
 }
 
+// --- LOCAL DATES (never toISOString / UTC, which shifts late-night entries to yesterday) ---
+
+function Pad_Two_Digits(number_arg) {
+  return (number_arg < 10 ? "0" : "") + String(number_arg);
+}
+
+// "YYYY-MM-DD" for the device's local calendar day
+function Get_Local_Date_Key(date_arg_obj) {
+  var date_obj = date_arg_obj || new Date();
+  return date_obj.getFullYear() + "-" + Pad_Two_Digits(date_obj.getMonth() + 1) + "-" + Pad_Two_Digits(date_obj.getDate());
+}
+
+// ISO 8601 with the local offset, e.g. "2026-10-17T01:30:00.000+05:30".
+// Same instant as toISOString(), but the date part is the local day.
+function Build_Local_Timestamp(date_arg_obj) {
+  var date_obj = date_arg_obj || new Date();
+  var offset_minutes = -date_obj.getTimezoneOffset();
+  var offset_sign = offset_minutes >= 0 ? "+" : "-";
+  var offset_abs = Math.abs(offset_minutes);
+  var millis_str = String(date_obj.getMilliseconds());
+  while (millis_str.length < 3) {
+    millis_str = "0" + millis_str;
+  }
+
+  return Get_Local_Date_Key(date_obj) +
+    "T" + Pad_Two_Digits(date_obj.getHours()) +
+    ":" + Pad_Two_Digits(date_obj.getMinutes()) +
+    ":" + Pad_Two_Digits(date_obj.getSeconds()) +
+    "." + millis_str +
+    offset_sign + Pad_Two_Digits(Math.floor(offset_abs / 60)) + ":" + Pad_Two_Digits(offset_abs % 60);
+}
+
+// Parses a stored timestamp. A bare "YYYY-MM-DD" (legacy) is read as LOCAL midnight,
+// not UTC midnight as new Date("YYYY-MM-DD") would.
+function Parse_Stored_Timestamp(value_arg) {
+  var value_str = String(value_arg || "");
+  if (/^\d{4}-\d{2}-\d{2}$/.test(value_str)) {
+    var parts = value_str.split("-");
+    return new Date(Number(parts[0]), Number(parts[1]) - 1, Number(parts[2]));
+  }
+  return new Date(value_str);
+}
+
 function Resolve_Category_Color(category_name_arg) {
   var category_name_str = String(category_name_arg || "");
   var category_map_obj = {

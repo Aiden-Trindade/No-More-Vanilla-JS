@@ -4,7 +4,7 @@
 // - On update it only deletes OLD "pet-app-*" caches, never other origins' caches.
 
 const CACHE_PREFIX = 'pet-app-';
-const CACHE_NAME = CACHE_PREFIX + 'v3';
+const CACHE_NAME = CACHE_PREFIX + 'v4';
 
 const APP_SHELL = [
   './',
@@ -62,7 +62,8 @@ self.addEventListener('fetch', (event) => {
   if (!request.url.startsWith(self.location.origin)) return;
 
   event.respondWith(
-    fetch(request)
+    // no-cache = revalidate with the server, so an update is never hidden by the HTTP cache
+    fetch(request, { cache: 'no-cache' })
       .then((networkResponse) => {
         if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
           const responseClone = networkResponse.clone();

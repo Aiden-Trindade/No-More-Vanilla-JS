@@ -62,15 +62,15 @@
 .Heatmap_Days_Col {
   display: grid;
   grid-template-rows: repeat(7, 1fr);
+  gap: 3px; /* same as the grid, so each label sits exactly beside its row */
   width: 24px;
   flex-shrink: 0;
-  padding-top: 2px;
 }
 
 .Day_Label {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start; /* flush with the card title's left edge */
   font-size: 9px;
   line-height: 1;
   color: var(--textdim);
@@ -84,20 +84,19 @@
   visibility: hidden;
 }
 
+/* never scrolls: the grid stretches/shrinks to fill the card width */
 .Heatmap_Scroll_Container {
   flex: 1;
   min-width: 0;
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow: visible;
 }
 
 .Heatmap_Grid {
   display: grid;
-  grid-template-columns: repeat(var(--heat-columns, 13), minmax(0, 1fr));
+  grid-template-columns: repeat(var(--heat-columns, 12), minmax(0, 1fr));
   grid-template-rows: repeat(7, minmax(0, 1fr));
   grid-auto-flow: column;
   gap: 3px;
-  min-width: 220px;
   width: 100%;
 }
 
@@ -183,40 +182,40 @@
   white-space: nowrap;
 }
 
-/* ---- heatmap levels: variables per theme, no hard-coded cell colours ---- */
-.Heatmap_Grid {
-  --heat-0: #141922;
-  --heat-1: #0e4429;
-  --heat-2: #006d32;
-  --heat-3: #26a641;
-  --heat-4: #39d353;
-  --heat-border: rgba(255, 255, 255, 0.05);
+/* ---- heatmap levels: derived from each theme's accent, no hard-coded cell colours ---- */
+.Heatmap_Grid,
+.Heatmap_Legend {
+  /* fallbacks for browsers without color-mix() */
+  --heat-0: var(--hoverbg);
+  --heat-1: var(--borderbold);
+  --heat-2: var(--accentdot);
+  --heat-3: var(--accentdot);
+  --heat-4: var(--accentglow);
+  --heat-border: var(--bordercol);
 }
 
-body.theme_dark_cool .Heatmap_Grid {
-  --heat-0: #141922;
+@supports (background: color-mix(in srgb, red 50%, blue)) {
+  .Heatmap_Grid,
+  .Heatmap_Legend {
+    --heat-0: color-mix(in srgb, var(--textmain) 6%, var(--boxbg));
+    --heat-1: color-mix(in srgb, var(--accentdot) 30%, var(--boxbg));
+    --heat-2: color-mix(in srgb, var(--accentdot) 52%, var(--boxbg));
+    --heat-3: color-mix(in srgb, var(--accentdot) 76%, var(--boxbg));
+    --heat-4: var(--accentdot);
+    --heat-border: color-mix(in srgb, var(--textmain) 8%, transparent);
+  }
 }
 
-body.theme_dark_warm .Heatmap_Grid {
-  --heat-0: #1f1b17;
-}
-
-body.theme_bright_cool .Heatmap_Grid {
-  --heat-0: #e6ebf2;
+/* bright themes: GitHub-style greens instead of the theme accent */
+body.theme_bright_cool .Heatmap_Grid,
+body.theme_bright_cool .Heatmap_Legend,
+body.theme_bright_warm .Heatmap_Grid,
+body.theme_bright_warm .Heatmap_Legend {
   --heat-1: #9be9a8;
   --heat-2: #40c463;
   --heat-3: #30a14e;
   --heat-4: #216e39;
-  --heat-border: rgba(15, 23, 42, 0.08);
-}
-
-body.theme_bright_warm .Heatmap_Grid {
-  --heat-0: #efe9df;
-  --heat-1: #9be9a8;
-  --heat-2: #40c463;
-  --heat-3: #30a14e;
-  --heat-4: #216e39;
-  --heat-border: rgba(28, 25, 23, 0.08);
+  --heat-glow: #30a14e;
 }
 
 .Contribution_Cell {
@@ -224,19 +223,27 @@ body.theme_bright_warm .Heatmap_Grid {
   aspect-ratio: 1;
   background-color: var(--heat-0);
   border: 1px solid var(--heat-border);
-  border-radius: 2px;
+  border-radius: 3px;
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.12);
   cursor: pointer;
-  transition: transform 0.12s ease, border-color 0.12s ease;
+  transition: transform 0.12s ease, border-color 0.12s ease, box-shadow 0.12s ease;
 }
 
 .Contribution_Cell[data-level="1"] { background-color: var(--heat-1); }
 .Contribution_Cell[data-level="2"] { background-color: var(--heat-2); }
 .Contribution_Cell[data-level="3"] { background-color: var(--heat-3); }
-.Contribution_Cell[data-level="4"] { background-color: var(--heat-4); }
+.Contribution_Cell[data-level="4"] {
+  background-color: var(--heat-4);
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.12), 0 0 6px -1px var(--heat-glow, var(--accentglow));
+}
 
-.Contribution_Cell:hover {
-  border-color: var(--textdim);
-  transform: translateY(-1px);
+.Contribution_Cell:hover,
+.Contribution_Cell:focus-visible {
+  border-color: var(--textmain);
+  transform: scale(1.15);
+  position: relative;
+  z-index: 1;
+  outline: none;
 }
 
 .Contribution_Cell.Is_Active {
@@ -245,14 +252,41 @@ body.theme_bright_warm .Heatmap_Grid {
 }
 
 .Contribution_Cell.Is_Today {
-  outline: 1px solid var(--textdim);
+  outline: 1.5px solid var(--accentdot);
   outline-offset: 1px;
 }
 
-/* padding cells that keep the Mon..Sun rows aligned; never visible or clickable */
+/* GitHub-style "Less ... More" key under the grid */
+.Heatmap_Legend {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3px;
+  margin-top: 8px;
+  font-size: 9px;
+  font-family: monospace;
+  color: var(--textdim);
+}
+
+.Heatmap_Legend .Contribution_Cell {
+  width: 10px;
+  cursor: default;
+}
+
+.Heatmap_Legend .Contribution_Cell:hover {
+  transform: none;
+  border-color: var(--heat-border);
+}
+
+.Heatmap_Legend_Text {
+  margin: 0 4px;
+}
+
+/* days after today in the current week: drawn as empty squares so the grid stays a full
+   rectangle, but never clickable */
 .Contribution_Cell.Is_Blank {
-  visibility: hidden;
   pointer-events: none;
+  cursor: default;
 }
 
 /* back link pill (same look as the dashboard capsule button) */
