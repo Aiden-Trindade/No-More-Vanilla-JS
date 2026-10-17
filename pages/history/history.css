@@ -93,7 +93,7 @@
 
 .Heatmap_Grid {
   display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
+  grid-template-columns: repeat(var(--heat-columns, 13), minmax(0, 1fr));
   grid-template-rows: repeat(7, minmax(0, 1fr));
   grid-auto-flow: column;
   gap: 3px;
@@ -242,6 +242,17 @@ body.theme_bright_warm .Heatmap_Grid {
 .Contribution_Cell.Is_Active {
   border-color: var(--textmain);
   box-shadow: inset 0 0 0 1px var(--textmain);
+}
+
+.Contribution_Cell.Is_Today {
+  outline: 1px solid var(--textdim);
+  outline-offset: 1px;
+}
+
+/* padding cells that keep the Mon..Sun rows aligned; never visible or clickable */
+.Contribution_Cell.Is_Blank {
+  visibility: hidden;
+  pointer-events: none;
 }
 
 /* back link pill (same look as the dashboard capsule button) */

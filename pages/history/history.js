@@ -262,16 +262,21 @@ function build_filtered_transactions() {
 /* ==========================================================================
    CONTRIBUTION HEATMAP
    ========================================================================== */
+// how many days the heatmap shows, ending today (84 = 12 weeks). Raise it to look further back.
+var heatmap_total_days = 84;
+
 function get_contribution_matrix_start_date() {
-  // 12 columns of Monday..Sunday. The last column is the current week, so today is always in the grid.
+  // rolling window: the last heatmap_total_days days, ending TODAY.
+  // It slides forward by one day every day, so today is always the last cell.
   var today = new Date();
-  var days_since_monday = 6;
+  return new Date(today.getFullYear(), today.getMonth(), today.getDate() - (heatmap_total_days - 1));
+}
 
-  if (today.getDay() !== 0) {
-    days_since_monday = today.getDay() - 1;
-  }
-
-  return new Date(today.getFullYear(), today.getMonth(), today.getDate() - days_since_monday - (11 * 7));
+function create_blank_heatmap_cell() {
+  var blank_cell = document.createElement("div");
+  blank_cell.className = "Contribution_Cell Is_Blank";
+  blank_cell.setAttribute("aria-hidden", "true");
+  return blank_cell;
 }
 
 function get_contribution_cell_level(total_spend, max_spend) {
@@ -402,28 +407,39 @@ function render_contribution_matrix() {
   var history = fetch_transaction_history_from_storage();
   var daily_totals = build_daily_totals_map(history);
   var matrix_start_date = get_contribution_matrix_start_date();
+  var today_key = generate_local_date_key(new Date());
   var heatmap_cells = [];
   var max_day_total = 0;
 
-  for (var week_index = 0; week_index < 12; week_index = week_index + 1) {
-    for (var day_index = 0; day_index < 7; day_index = day_index + 1) {
-      var current_date = new Date(matrix_start_date.getFullYear(), matrix_start_date.getMonth(), matrix_start_date.getDate() + (week_index * 7) + day_index);
-      var date_key = generate_local_date_key(current_date);
-      var day_total = daily_totals[date_key] || 0;
+  for (var day_offset = 0; day_offset < heatmap_total_days; day_offset = day_offset + 1) {
+    var current_date = new Date(matrix_start_date.getFullYear(), matrix_start_date.getMonth(), matrix_start_date.getDate() + day_offset);
+    var date_key = generate_local_date_key(current_date);
+    var day_total = daily_totals[date_key] || 0;
 
-      if (day_total > max_day_total) {
-        max_day_total = day_total;
-      }
-
-      heatmap_cells.push({
-        date_key: date_key,
-        total: day_total,
-        date_label: format_friendly_local_date(current_date)
-      });
+    if (day_total > max_day_total) {
+      max_day_total = day_total;
     }
+
+    heatmap_cells.push({
+      date_key: date_key,
+      total: day_total,
+      date_label: format_friendly_local_date(current_date)
+    });
   }
 
+  // rows are Mon..Sun. Pad the first column (days before the window) and the last column (days after today)
+  var leading_blank_count = (matrix_start_date.getDay() + 6) % 7;
+  var column_count = Math.ceil((leading_blank_count + heatmap_total_days) / 7);
+  var trailing_blank_count = (column_count * 7) - leading_blank_count - heatmap_total_days;
+
+  matrix_container.style.setProperty("--heat-columns", String(column_count));
   matrix_container.innerHTML = "";
+
+  var cell_fragment = document.createDocumentFragment();
+
+  for (var lead_index = 0; lead_index < leading_blank_count; lead_index = lead_index + 1) {
+    cell_fragment.appendChild(create_blank_heatmap_cell());
+  }
 
   for (var cell_index = 0; cell_index < heatmap_cells.length; cell_index = cell_index + 1) {
     var cell_data = heatmap_cells[cell_index];
@@ -432,6 +448,10 @@ function render_contribution_matrix() {
     cell.setAttribute("data-level", String(get_contribution_cell_level(cell_data.total, max_day_total)));
     cell.setAttribute("data-date", cell_data.date_key);
     cell.title = cell_data.date_label + ": " + Get_Currency_Symbol(Get_Active_Currency_Code()) + format_currency_amount(cell_data.total);
+
+    if (cell_data.date_key === today_key) {
+      cell.classList.add("Is_Today");
+    }
 
     if (selected_day_filter === cell_data.date_key) {
       cell.classList.add("Is_Active");
@@ -451,7 +471,18 @@ function render_contribution_matrix() {
       };
     }(cell_data.date_key));
 
-    matrix_container.appendChild(cell);
+    cell_fragment.appendChild(cell);
+  }
+
+  for (var trail_index = 0; trail_index < trailing_blank_count; trail_index = trail_index + 1) {
+    cell_fragment.appendChild(create_blank_heatmap_cell());
+  }
+
+  matrix_container.appendChild(cell_fragment);
+
+  // keep today in view when the window is wider than the card
+  if (matrix_container.parentElement) {
+    matrix_container.parentElement.scrollLeft = matrix_container.parentElement.scrollWidth;
   }
 
   if (selected_day_filter) {
