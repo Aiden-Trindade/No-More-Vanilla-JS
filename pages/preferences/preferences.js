@@ -377,7 +377,9 @@ function Render_Budget_Fields() {
       budget_list_el.appendChild(row_el);
     }
 
-    var input_el = document.getElementById("budget-input-" + category_str);
+    // look inside THIS row: the preset rows hard-coded in preferences.html share these ids and
+    // are removed below, so getElementById would fill the old copy and leave the visible box empty
+    var input_el = row_el.querySelector("input");
     if (!input_el) {
       continue;
     }
