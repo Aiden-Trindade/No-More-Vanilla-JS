@@ -343,9 +343,38 @@ function Apply_Saved_Name() {
   return display_name_str;
 }
 
+// "Good morning," 05:00-11:59, "Good afternoon," 12:00-16:59, "Good evening," 17:00-04:59 (local time)
+function Get_Time_Of_Day_Greeting(date_arg_obj) {
+  var hour_number = (date_arg_obj || new Date()).getHours();
+
+  if (hour_number >= 5 && hour_number < 12) {
+    return "Good morning,";
+  }
+  if (hour_number >= 12 && hour_number < 17) {
+    return "Good afternoon,";
+  }
+  return "Good evening,";
+}
+
+function Apply_Time_Greeting() {
+  var greeting_phrase_el = document.getElementById("greeting-phrase");
+  if (greeting_phrase_el) {
+    greeting_phrase_el.textContent = Get_Time_Of_Day_Greeting(new Date());
+  }
+}
+
 Apply_Saved_Theme();
 Run_Category_Migration();
 Apply_Saved_Name();
+Apply_Time_Greeting();
+
+// keep the greeting right when the app is left open or resumed later (e.g. morning -> afternoon)
+setInterval(Apply_Time_Greeting, 60000);
+document.addEventListener("visibilitychange", function() {
+  if (document.visibilityState === "visible") {
+    Apply_Time_Greeting();
+  }
+});
 
 /* ==========================================================================
    PWA INSTALL

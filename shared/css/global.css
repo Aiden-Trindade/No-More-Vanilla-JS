@@ -64,6 +64,7 @@ button, input, select, textarea {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 24px; /* breathing room between the greeting and the nav pill */
   padding-left: 18px;
   padding-right: 18px;
   padding-top: 16px;
@@ -73,7 +74,14 @@ button, input, select, textarea {
   z-index: 20;
 }
 
+/* greeting column takes the free space and wraps instead of running under the pill */
+.Top_Header > div:first-child {
+  flex: 1;
+  min-width: 0;
+}
+
 .Greeting_Text {
+  overflow-wrap: anywhere;
   font-size: 21px;
   font-weight: 700;
   padding-bottom: var(--spacer);                         /* personal spacing preference */
@@ -94,6 +102,7 @@ button, input, select, textarea {
 
 .Capsule_Nav {
   position: relative;
+  flex-shrink: 0;
 }
 
 .Capsule_Btn {
